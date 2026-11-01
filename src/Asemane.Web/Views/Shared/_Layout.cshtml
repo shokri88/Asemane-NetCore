@@ -1,0 +1,27 @@
+@inject SiteService SiteService
+@inject SeoService SeoService
+@{
+    var culture = ViewData["Culture"] as string ?? "en";
+    var site = await SiteService.GetAsync(culture);
+    var seo = ViewData["Seo"] as SeoModel ?? new SeoModel { Title = site.Settings.Brand, NoIndex = true };
+    var hasAbout = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync(SiteService.Published(culture,ContentKind.Page).Where(x => x.Slug == "about"));
+    var hasContact = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync(SiteService.Published(culture,ContentKind.Page).Where(x => x.Slug == "contact"));
+}
+<!doctype html><html lang="@culture" dir="@(culture == "fa" ? "rtl" : "ltr")"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>@seo.Title</title><meta name="description" content="@seo.Description"><meta name="robots" content="@(seo.NoIndex ? "noindex,follow" : "index,follow,max-image-preview:large")">
+@if (seo.Canonical != "") { <link rel="canonical" href="@seo.Canonical"> }
+@foreach (var alternate in seo.Alternates) { <link rel="alternate" hreflang="@alternate.Key" href="@alternate.Value"> }
+<meta property="og:title" content="@seo.Title"><meta property="og:description" content="@seo.Description"><meta property="og:type" content="@seo.Type"><meta property="og:url" content="@seo.Canonical"><meta property="og:site_name" content="@site.Settings.Brand">
+@if (seo.Image != "") { <meta property="og:image" content="@seo.Image"><meta name="twitter:card" content="summary_large_image"> } else { <meta name="twitter:card" content="summary"> }
+<meta name="twitter:title" content="@seo.Title"><meta name="twitter:description" content="@seo.Description">
+@if (seo.JsonLd != "") { <script type="application/ld+json">@Html.Raw(seo.JsonLd)</script> }
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+</head><body><a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header"><a href="/@culture" class="studio-brand"><span>@site.Settings.Brand</span><img src="@(site.Settings.LogoId.HasValue ? "/media/"+site.Settings.LogoId : Url.Content("~/theme/logo.png"))" alt="@site.Settings.Brand" width="80" height="80"></a>
+<button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false">Menu <span aria-hidden="true">☰</span></button>
+<nav id="main-nav" aria-label="Main navigation"><a href="/@culture">Home</a><a href="/@culture/projects">Projects</a>@if (hasAbout) { <a href="/@culture/about">About</a> }<a href="/@culture/journal">Journal</a>@if (hasContact) { <a href="/@culture/contact">Contact</a> }</nav></header>
+<main id="main">@RenderBody()</main>
+<footer class="site-footer"><span>© @DateTime.UtcNow.Year @site.Settings.Brand</span>@if (site.Settings.Email != "") { <a href="mailto:@site.Settings.Email">@site.Settings.Email</a> }@if (site.Settings.InstagramUrl != "") { <a href="@site.Settings.InstagramUrl" target="_blank" rel="noopener noreferrer">Instagram ↗</a> }</footer>
+<script src="~/js/site.js" asp-append-version="true" defer></script>@await RenderSectionAsync("Scripts",false)
+</body></html>

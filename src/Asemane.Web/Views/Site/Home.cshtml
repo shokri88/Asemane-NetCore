@@ -1,0 +1,12 @@
+@model List<ContentTranslation>
+@{ var culture = ViewData["Culture"] as string ?? "en"; }
+<h1 class="visually-hidden">Architecture and Interior Design — Selected Projects</h1>
+<section class="home-showcase" aria-label="Selected projects">
+@if (Model.Count == 0) { <div class="empty-public"><p class="eyebrow">ASMANE ARCHITECTURAL STUDIO</p><h2>Architecture. Space. People.</h2><p>Our selected projects will be available here soon.</p><a class="text-link" href="/@culture/projects">Explore projects →</a></div> }
+else {
+<div class="showcase-track" id="showcase-track">
+@foreach (var t in Model) { var cover = SiteService.Cover(t.ContentItem); var second = t.ContentItem.Images.OrderBy(x => x.SortOrder).FirstOrDefault(x => x.Id != cover?.Id); var category = t.ContentItem.Category?.Translations.FirstOrDefault(x => x.Culture == culture)?.Name;
+<article class="showcase-card"><a href="@Slugs.Path(t.Kind,culture,t.Slug)" class="showcase-image">@if (cover is not null) { <img src="/media/@cover.Id" alt="@SiteService.Alt(cover,culture)" width="600" height="900" loading="@(t == Model[0] ? "eager" : "lazy")"> } else { <span class="image-placeholder">@t.Title</span> }@if (second is not null) { <img class="secondary-image" src="/media/@second.Id" alt="" width="600" height="900" loading="lazy"> }</a><div class="showcase-caption"><h2><a href="@Slugs.Path(t.Kind,culture,t.Slug)">@t.Title</a></h2><p>@category</p></div></article>
+}</div><div class="showcase-controls"><span>SELECTED WORK</span><div><button data-scroll="-1" aria-label="Previous projects">←</button><button data-scroll="1" aria-label="Next projects">→</button></div></div>
+}
+</section>

@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+.vs/
+**/App_Data/
+**/appsettings.Local.json
+**/appsettings.*.local.json
+**/wwwroot/uploads/
+TestResults/
+*.user
+*.suo
+.env

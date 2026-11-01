@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>@ViewData["Title"] | مدیریت آسمانه</title>
+<link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.rtl.min.css" asp-append-version="true">
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true">
+</head>
+<body class="admin-body">
+<a class="visually-hidden-focusable skip-link" href="#main">رفتن به محتوا</a>
+<aside class="offcanvas-lg offcanvas-start admin-sidebar" tabindex="-1" id="sidebar" aria-label="منوی مدیریت">
+<div class="offcanvas-header"><a class="admin-brand" href="/admin">آسمانه<span>مدیریت محتوا</span></a><button class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="بستن منو"></button></div>
+<div class="offcanvas-body d-flex flex-column">
+<p class="nav-caption">فضای کاری</p>
+<nav class="nav flex-column gap-1">
+<a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">نمای کلی</a>
+@foreach (var kind in Enum.GetValues<ContentKind>()) {
+<a class="nav-link" asp-area="Admin" asp-controller="Content" asp-action="Index" asp-route-kind="@kind">@Display.Kind(kind)</a>
+}
+<a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Index">دسته‌بندی‌ها</a>
+@if (User.IsInRole("Admin")) {
+<a class="nav-link" asp-area="Admin" asp-controller="Settings" asp-action="Index">تنظیمات سایت</a>
+<a class="nav-link" asp-area="Admin" asp-controller="Users" asp-action="Index">کاربران و دسترسی‌ها</a>
+}
+</nav>
+<div class="sidebar-bottom"><a href="/en" target="_blank" rel="noopener">مشاهده سایت ↗</a><p>محتوای انگلیسی · فاز اول</p></div>
+</div>
+</aside>
+<div class="admin-shell">
+<header class="admin-topbar"><button class="btn btn-outline-secondary d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">منو</button><span class="text-secondary">استودیوی معماری آسمانه</span><div class="d-flex align-items-center gap-3"><span class="small" dir="ltr">@User.Identity?.Name</span><form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post"><button class="btn btn-sm btn-light">خروج</button></form></div></header>
+<main id="main" class="admin-main">
+<nav aria-label="مسیر صفحه"><ol class="breadcrumb small"><li class="breadcrumb-item"><a href="/admin">مدیریت</a></li><li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li></ol></nav>
+<div class="page-heading"><div><h1>@ViewData["Title"]</h1><p class="text-secondary mb-0">@ViewData["Description"]</p></div>@await RenderSectionAsync("Actions",false)</div>
+@if (TempData["Success"] is string success) { <div class="alert alert-success" role="status">@success</div> }
+@if (TempData["Error"] is string error) { <div class="alert alert-danger" role="alert">@error</div> }
+@RenderBody()
+</main><footer class="admin-footer">پنل مدیریت آسمانه · تغییرات فقط پس از ذخیره اعمال می‌شوند.</footer>
+</div>
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+<script src="~/js/admin.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts",false)
+</body></html>

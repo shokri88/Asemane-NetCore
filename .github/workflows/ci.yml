@@ -1,0 +1,24 @@
+name: Build and test
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore Asemane.sln
+      - run: dotnet tool restore
+      - run: dotnet build Asemane.sln --no-restore -c Release
+      - run: dotnet test tests/Asemane.Tests --no-build -c Release --logger "trx;LogFileName=tests.trx"
+      - run: dotnet ef migrations has-pending-model-changes --project src/Asemane.Web --configuration Release --no-build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: '**/TestResults/*.trx'

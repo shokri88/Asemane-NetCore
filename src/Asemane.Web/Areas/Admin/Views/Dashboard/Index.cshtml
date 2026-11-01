@@ -1,0 +1,12 @@
+@model DashboardModel
+@{ ViewData["Title"] = "نمای کلی"; ViewData["Description"] = "وضعیت محتوا و آخرین ویرایش‌های سایت"; }
+@section Actions { <a class="btn btn-primary" asp-controller="Content" asp-action="Edit" asp-route-kind="Project">پروژه جدید</a> }
+<div class="row g-3 mb-4">
+@foreach (var stat in new[] { ("پروژه",Model.Projects), ("مقاله",Model.Articles), ("پیش‌نویس",Model.Drafts), ("تصویر",Model.Images) }) {
+<div class="col-6 col-xl-3"><div class="card stat-card"><span>@stat.Item1</span><strong>@Display.Persian(stat.Item2)</strong></div></div>
+}
+</div><div class="card"><div class="card-header">آخرین تغییرات</div><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>عنوان</th><th>بخش</th><th>آخرین ویرایش</th><th>عملیات</th></tr></thead><tbody>
+@foreach (var item in Model.Recent) { <tr><td dir="ltr" class="text-start">@item.Translations.FirstOrDefault(t => t.Culture == "en")?.Title</td><td>@Display.Kind(item.Kind)</td><td>@Display.Date(item.UpdatedAt)</td><td><a class="btn btn-sm btn-outline-secondary" asp-controller="Content" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a></td></tr> }
+@if (Model.Recent.Count == 0) { <tr><td colspan="4" class="empty-state">هنوز محتوایی ثبت نشده است.</td></tr> }
+</tbody></table></div></div>
+<div class="alert alert-light border mt-4">برای شروع، تنظیمات سایت را تکمیل کنید، دسته‌بندی بسازید و سپس پروژه یا مقاله اضافه کنید. درباره و تماس ابتدا پیش‌نویس هستند.</div>

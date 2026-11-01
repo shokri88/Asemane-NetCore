@@ -1,0 +1,3 @@
+@model int
+@{ Layout = null; }
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>@Model — Asmane Studio</title><link rel="stylesheet" href="/css/site.css"></head><body><main class="empty-public"><p class="eyebrow">ASMANE STUDIO · @Model</p><h1>@(Model == 404 ? "Page not found" : "Request could not be completed")</h1><p>@(Model == 404 ? "This page may have moved or is no longer available." : "Please check the request and try again.")</p><a class="text-link" href="/en">Return home →</a></main></body></html>

@@ -1,0 +1,25 @@
+@model PublicDetail
+@inject SiteService SiteService
+@{ var t = Model.Translation; var item = t.ContentItem; var images = item.Images.OrderByDescending(x => x.IsCover).ThenBy(x => x.SortOrder).ThenBy(x => x.Id).ToList(); var cover = images.FirstOrDefault(); var site = await SiteService.GetAsync(Model.Culture); }
+<article class="page-container detail-page">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
+<h1>@t.Title</h1>
+@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
+@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
+@if (item.Kind == ContentKind.Project) {
+<dl class="project-facts">@if (item.Area.HasValue) { <div><dt>Area</dt><dd>@item.Area.Value.ToString("0.##",System.Globalization.CultureInfo.InvariantCulture) m²</dd></div> }@if (item.Year.HasValue) { <div><dt>Year</dt><dd>@item.Year</dd></div> }@if (t.ProjectStatus != "") { <div><dt>Status</dt><dd>@t.ProjectStatus</dd></div> }@if (t.Location != "") { <div><dt>Location</dt><dd>@t.Location</dd></div> }</dl>
+}
+@if (item.Kind == ContentKind.Article) { <div class="article-byline">@if (t.AuthorName != "") { <span>@t.AuthorName</span> }<time datetime="@t.PublishedAt?.ToString("O")">@t.PublishedAt?.ToString("dd MMM yyyy",System.Globalization.CultureInfo.InvariantCulture)</time></div> }
+@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
+<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
+@if (images.Count > 1) {
+<section class="project-gallery" aria-label="Project image gallery"><h2 class="visually-hidden">Project gallery</h2><figure><img id="gallery-preview" src="/media/@cover!.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" loading="lazy"><figcaption id="gallery-caption">@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure><div class="gallery-thumbs" role="group" aria-label="Choose image">@foreach (var image in images) { var translation = image.Translations.FirstOrDefault(x => x.Culture == Model.Culture); <button type="button" data-image="/media/@image.Id" data-alt="@translation?.Alt" data-caption="@translation?.Caption" aria-label="View image: @translation?.Alt" aria-pressed="@(image.Id == cover!.Id ? "true" : "false")"><img src="/media/@image.Id" alt="" width="120" height="90" loading="lazy"></button> }</div></section>
+}
+@if (item.Kind == ContentKind.Page && t.Slug == "about") {
+@if (Model.Team.Count > 0) { <section class="team-section"><h2>Our team</h2><div class="team-grid">@foreach (var member in Model.Team) { var portrait = SiteService.Cover(member.ContentItem); <article>@if (portrait is not null) { <a href="@Slugs.Path(member.Kind,Model.Culture,member.Slug)"><img src="/media/@portrait.Id" alt="@SiteService.Alt(portrait,Model.Culture)" width="400" height="500" loading="lazy"></a> }<h3><a href="@Slugs.Path(member.Kind,Model.Culture,member.Slug)">@member.Title</a></h3><p>@member.Subtitle</p></article> }</div></section> }
+<dl class="studio-stats">@if (site.Settings.CompletedProjects > 0) { <div><dd>@site.Settings.CompletedProjects</dd><dt>Completed projects</dt></div> }@if (site.Settings.YearsExperience > 0) { <div><dd>@site.Settings.YearsExperience</dd><dt>Years of experience</dt></div> }@if (site.Settings.TeamCount > 0) { <div><dd>@site.Settings.TeamCount</dd><dt>Team members</dt></div> }</dl>
+}
+@if (item.Kind == ContentKind.Page && t.Slug == "contact") {
+<div class="contact-grid">@if (site.Translation.Address != "") { <section><h2>Address</h2><address>@site.Translation.Address</address>@if (site.Settings.Latitude.HasValue && site.Settings.Longitude.HasValue) { var coordinates = site.Settings.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)+","+site.Settings.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture); <a href="https://www.google.com/maps/search/?api=1&query=@coordinates" target="_blank" rel="noopener noreferrer">Open map ↗</a> }</section> }<section><h2>Contact</h2>@if (site.Settings.Phone != "") { <a href="tel:@site.Settings.Phone">@site.Settings.Phone</a> }@if (site.Settings.Email != "") { <a href="mailto:@site.Settings.Email">@site.Settings.Email</a> }</section>@if (site.Settings.InstagramUrl != "") { <section><h2>Social</h2><a href="@site.Settings.InstagramUrl" target="_blank" rel="noopener noreferrer">Instagram ↗</a></section> }</div>
+}
+</article>

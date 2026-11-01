@@ -1,0 +1,33 @@
+@model ContentForm
+@{ ViewData["Title"] = Model.Id == 0 ? "افزودن محتوا" : "ویرایش محتوا"; ViewData["Description"] = Display.Kind(Model.Kind) + " · زبان انگلیسی"; }
+@section Actions { <a class="btn btn-outline-secondary" asp-action="Index" asp-route-kind="@Model.Kind">بازگشت به فهرست</a> }
+<form method="post" asp-action="Edit" class="content-form">
+<input asp-for="Id" type="hidden"><input asp-for="Kind" type="hidden"><input asp-for="Version" type="hidden"><input asp-for="Culture" type="hidden">
+<div asp-validation-summary="All" class="alert alert-danger validation-summary" role="alert"></div>
+<div class="card mb-4"><div class="card-header">اطلاعات محتوا</div><div class="card-body"><div class="row g-3">
+<div class="col-md-8"><label asp-for="Title" class="form-label">عنوان انگلیسی *</label><input asp-for="Title" class="form-control" dir="ltr" maxlength="180" required><span asp-validation-for="Title" class="field-error"></span></div>
+<div class="col-md-4"><label asp-for="Slug" class="form-label">آدرس صفحه (Slug) *</label><input asp-for="Slug" class="form-control" dir="ltr" maxlength="180" required><span asp-validation-for="Slug" class="field-error"></span><div class="form-text">مثل garden-house؛ تغییر آدرس، ریدایرکت می‌سازد.</div></div>
+@if (Model.Kind is ContentKind.Project or ContentKind.Article) {
+<div class="col-md-4"><label asp-for="CategoryId" class="form-label">دسته‌بندی</label><select asp-for="CategoryId" asp-items="Model.Categories" class="form-select"><option value="">بدون دسته‌بندی</option></select><span asp-validation-for="CategoryId" class="field-error"></span></div>
+}
+@if (Model.Kind == ContentKind.Project) {
+<div class="col-md-4"><label asp-for="Area" class="form-label">مساحت (مترمربع)</label><input asp-for="Area" class="form-control" type="number" min="0" step="0.01" dir="ltr"></div>
+<div class="col-md-4"><label asp-for="Year" class="form-label">سال پروژه (میلادی)</label><input asp-for="Year" class="form-control" type="number" min="1000" max="3000" dir="ltr"></div>
+<div class="col-md-4"><label asp-for="Location" class="form-label">موقعیت پروژه</label><input asp-for="Location" class="form-control" dir="ltr" maxlength="180"></div>
+<div class="col-md-4"><label asp-for="ProjectStatus" class="form-label">وضعیت پروژه</label><input asp-for="ProjectStatus" class="form-control" dir="ltr" placeholder="Completed / In progress" maxlength="80"></div>
+}
+@if (Model.Kind == ContentKind.Team) { <div class="col-md-4"><label asp-for="Subtitle" class="form-label">سمت عضو تیم</label><input asp-for="Subtitle" class="form-control" dir="ltr" maxlength="180"></div> }
+@if (Model.Kind == ContentKind.Article) { <div class="col-md-4"><label asp-for="AuthorName" class="form-label">نام نویسنده واقعی</label><input asp-for="AuthorName" class="form-control" dir="ltr" maxlength="100"></div> }
+<div class="col-12"><label asp-for="Summary" class="form-label">خلاصه توضیحات</label><input asp-for="Summary" class="form-control" dir="ltr" maxlength="500"></div>
+<div class="col-12"><label asp-for="Body" class="form-label">متن اصلی</label><textarea asp-for="Body" class="form-control content-editor" dir="ltr" rows="12" maxlength="100000"></textarea><div class="form-text">هر بخش با یک خط خالی جدا شود. تیتر با ## یا ### و فهرست با - شروع شود. کد HTML به‌صورت متن نمایش داده می‌شود.</div><span asp-validation-for="Body" class="field-error"></span></div>
+</div></div></div>
+<div class="card mb-4"><div class="card-header">سئو و نمایش در نتایج جست‌وجو</div><div class="card-body"><div class="row g-3">
+<div class="col-md-6"><label asp-for="SeoTitle" class="form-label">عنوان سئو</label><input asp-for="SeoTitle" class="form-control" dir="ltr" maxlength="70" data-counter="seo-title-count"><div class="form-text" id="seo-title-count"></div><span asp-validation-for="SeoTitle" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="MetaDescription" class="form-label">توضیحات متا *</label><input asp-for="MetaDescription" class="form-control" dir="ltr" maxlength="170" data-counter="meta-count"><div class="form-text" id="meta-count"></div><span asp-validation-for="MetaDescription" class="field-error"></span></div>
+<div class="col-12"><div class="setting-box"><div class="form-check"><input asp-for="NoIndex" class="form-check-input"><label asp-for="NoIndex" class="form-check-label">این صفحه در نتایج جست‌وجو ایندکس نشود</label></div></div></div>
+</div></div></div>
+<div class="card"><div class="card-header">انتشار و ترتیب نمایش</div><div class="card-body"><div class="row g-3 align-items-end"><div class="col-md-4"><label asp-for="SortOrder" class="form-label">ترتیب نمایش</label><input asp-for="SortOrder" class="form-control" type="number" min="0" max="99999"><div class="form-text">عدد کوچک‌تر جلوتر نمایش داده می‌شود.</div></div><div class="col-md-4"><div class="setting-box"><div class="form-check"><input asp-for="Published" class="form-check-input"><label asp-for="Published" class="form-check-label">انتشار در سایت</label></div></div></div>
+@if (Model.Kind == ContentKind.Project) { <div class="col-md-4"><div class="setting-box"><div class="form-check"><input asp-for="Featured" class="form-check-input"><label asp-for="Featured" class="form-check-label">نمایش در اسلایدر صفحه اصلی</label></div></div></div> }
+</div></div><div class="card-footer d-flex gap-2 flex-wrap"><button class="btn btn-primary">ذخیره تغییرات</button><a class="btn btn-light" asp-action="Index" asp-route-kind="@Model.Kind">انصراف</a>
+@if (Model.Id != 0) { <a class="btn btn-outline-secondary ms-auto" asp-controller="Media" asp-action="Index" asp-route-contentId="@Model.Id">مدیریت تصاویر</a> }
+</div></div></form>

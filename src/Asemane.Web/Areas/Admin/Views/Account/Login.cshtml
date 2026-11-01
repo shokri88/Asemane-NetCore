@@ -1,0 +1,8 @@
+@model LoginForm
+@{ Layout = null; }
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ورود به مدیریت آسمانه</title><link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.rtl.min.css"><link rel="stylesheet" href="~/css/admin.css"></head>
+<body class="login-body"><main class="login-card"><span class="eyebrow">ASMANE STUDIO</span><h1 class="h3 mt-3">ورود به مدیریت</h1><p class="text-secondary">برای مدیریت محتوای سایت وارد شوید.</p>
+<form method="post" asp-action="Login"><div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="ReturnUrl" type="hidden">
+<div class="mb-3"><label asp-for="Email" class="form-label">ایمیل</label><input asp-for="Email" class="form-control" autocomplete="username" dir="ltr" required autofocus></div>
+<div class="mb-3"><label asp-for="Password" class="form-label">رمز عبور</label><input asp-for="Password" class="form-control" autocomplete="current-password" dir="ltr" required></div>
+<div class="form-check mb-4"><input asp-for="RememberMe" class="form-check-input"><label asp-for="RememberMe" class="form-check-label">مرا به خاطر بسپار</label></div><button class="btn btn-primary w-100">ورود</button></form><a class="d-block mt-4 small" href="/en">بازگشت به سایت</a></main></body></html>

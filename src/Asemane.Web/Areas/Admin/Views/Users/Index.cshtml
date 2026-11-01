@@ -1,0 +1,8 @@
+@model List<ApplicationUser>
+@inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> UserManager
+@{ ViewData["Title"] = "کاربران و دسترسی‌ها"; }
+@section Actions { <a asp-action="Create" class="btn btn-primary">کاربر جدید</a> }
+<div class="card table-responsive"><table class="table align-middle mb-0"><thead><tr><th>نام</th><th>ایمیل</th><th>نقش</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody>
+@foreach (var user in Model) { var locked = user.LockoutEnd > DateTimeOffset.UtcNow; var roles = await UserManager.GetRolesAsync(user);
+<tr><td>@user.DisplayName</td><td dir="ltr">@user.Email</td><td>@string.Join("، ",roles)</td><td>@(locked ? "قفل‌شده" : "فعال")</td><td><div class="d-flex gap-2"><a asp-action="ResetPassword" asp-route-id="@user.Id" class="btn btn-sm btn-outline-secondary">تغییر رمز</a>@if (!roles.Contains("Admin")) { <form asp-action="ToggleLock" method="post" data-confirm="وضعیت دسترسی این کاربر تغییر کند؟"><input type="hidden" name="id" value="@user.Id"><button class="btn btn-sm btn-outline-danger">@(locked ? "فعال‌سازی" : "غیرفعال‌سازی")</button></form> }</div></td></tr>
+}</tbody></table></div>

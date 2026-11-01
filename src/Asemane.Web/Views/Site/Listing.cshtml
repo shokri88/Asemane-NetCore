@@ -1,0 +1,9 @@
+@model PublicList
+@{ var title = Model.Kind == ContentKind.Project ? "Projects" : "Journal"; var segment = Slugs.Segment(Model.Kind); }
+<div class="page-container"><div class="listing-heading"><h1>@title</h1><nav class="category-filters" aria-label="Filter by category"><a href="/@Model.Culture/@segment" class="@(Model.Category is null ? "selected" : "")">All</a>@foreach (var category in Model.Categories) { <a href="/@Model.Culture/@segment?category=@Uri.EscapeDataString(category.Slug)" class="@(Model.Category == category.Slug ? "selected" : "")">@category.Name</a> }</nav></div>
+<div class="project-grid">
+@foreach (var t in Model.Items) { var cover = SiteService.Cover(t.ContentItem); <article class="project-card"><a href="@Slugs.Path(t.Kind,Model.Culture,t.Slug)" class="project-image">@if (cover is not null) { <img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" loading="lazy" width="600" height="600"> } else { <span class="image-placeholder">@t.Title</span> }</a><div class="project-caption"><h2><a href="@Slugs.Path(t.Kind,Model.Culture,t.Slug)">@t.Title</a></h2>@if (Model.Kind == ContentKind.Article) { <p>@t.Summary</p><time datetime="@t.PublishedAt?.ToString("O")">@t.PublishedAt?.ToString("dd MMM yyyy",System.Globalization.CultureInfo.InvariantCulture)</time> } else { <p>@t.ContentItem.Category?.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Name</p> }</div></article> }
+</div>
+@if (Model.Items.Count == 0) { <p class="empty-public">No published content is available in this section yet.</p> }
+<nav class="pagination" aria-label="Pagination">@if (Model.Page > 1) { <a href="/@Model.Culture/@segment?page=@(Model.Page-1)&category=@Uri.EscapeDataString(Model.Category ?? "")">← Previous</a> }<span>Page @Model.Page of @Model.Pages</span>@if (Model.Page < Model.Pages) { <a href="/@Model.Culture/@segment?page=@(Model.Page+1)&category=@Uri.EscapeDataString(Model.Category ?? "")">Next →</a> }</nav>
+</div>
