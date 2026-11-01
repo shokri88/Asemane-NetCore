@@ -1,14 +1,282 @@
 @model PublicDetail
 @inject SiteService SiteService
-@{ var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); var site = await SiteService.GetAsync(Model.Culture); }
-<article class="page-container detail-page">
-<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
-<h1>@t.Title</h1>
-@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
-@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
-@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
-<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
-<partial name="_Gallery" model="Model" />
-@if (Model.Team.Count > 0) { <section class="team-section"><h2>Our team</h2><div class="team-grid">@foreach (var member in Model.Team) { var portrait = SiteService.Cover(member.ContentItem); <article>@if (portrait is not null) { <a href="@Slugs.Path(member.Kind,Model.Culture,member.Slug)"><img src="/media/@portrait.Id" alt="@SiteService.Alt(portrait,Model.Culture)" width="400" height="500" loading="lazy"></a> }<h3><a href="@Slugs.Path(member.Kind,Model.Culture,member.Slug)">@member.Title</a></h3><p>@member.Subtitle</p></article> }</div></section> }
-<dl class="studio-stats">@if (site.Settings.CompletedProjects > 0) { <div><dd>@site.Settings.CompletedProjects</dd><dt>Completed projects</dt></div> }@if (site.Settings.YearsExperience > 0) { <div><dd>@site.Settings.YearsExperience</dd><dt>Years of experience</dt></div> }@if (site.Settings.TeamCount > 0) { <div><dd>@site.Settings.TeamCount</dd><dt>Team members</dt></div> }</dl>
-</article>
+@using Microsoft.EntityFrameworkCore
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync();  }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/shop.min.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+    <link rel="stylesheet" href="/template/css/prodet-v1.css">
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Project</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                                <li id="menu-item-6"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!--/END HEADER-->
+    <!--MAIN BODY-->
+<h1 class="sr-only">@Model.Translation.Title</h1>
+
+    <div class="container blog-page about-page">
+
+        <div class="prodet-page">
+            <div class="row interior">
+                <div class="container">
+                    <div class="row-fluid no-padd">
+                        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12  m-auto">
+                            <div class="heading no-padd-top-bottom left dark">
+
+                                <h2 class="title">@Model.Translation.Title</h2>
+                                <div class="content "><partial name="_ContentBody" model="Model.Translation.Body" /></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Post comments -->
+                <div class="post-comments">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12  m-auto">
+                            <div class="prague-comments-list" id="comments">
+                                <ul>
+@foreach (var t in Model.Team) { var cover = SiteService.Cover(t.ContentItem);
+<li class="comment  thread- depth-1 ct-part" id="li-comment-@t.Id">
+                                        <div class="comm-block" id="comment-@t.Id">
+                                            <div class="comm-img">
+                                                @if (cover is not null) { <img alt="@SiteService.Alt(cover,culture)" src="/media/@cover.Id" class="avatar avatar-80 photo" /> }
+                                            </div>
+                                            <div class="comm-txt">
+                                                <h4><a href="@Slugs.Path(t.Kind,culture,t.Slug)">@t.Title</a></h4>
+                                                <p>@t.Summary</p>
+                                            </div>
+                                        </div>
+                                    </li>
+}
+</ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- End post comments -->
+            </div>
+        </div>
+
+        <div class="row counter">
+            <div class="container">
+                <div class="row-fluid ">
+                    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 m-auto">
+                        <div class="project-detail-block-outer">
+                            <div class="project-detail-block-wrapper">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                        <h6 class="counter-num">@Model.TotalProjects</h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            All Projects
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-detail-block-wrapper mid">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                        <h6 class="counter-num">@Model.DesignProjects</h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            Design Development
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-detail-block-wrapper">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                        <h6 class="counter-num">@Model.ConstructionProjects</h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            Under Construction
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-detail-block-wrapper">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                        <h6 class="counter-num">@Model.CompletedProjects</h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            Complete
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--/MAIN BODY-->
+
+
+
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/slick.min.js"></script>
+    <script src="/template/js/swiper-bundle.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/all.js"></script>
+
+    <script>
+
+        document.addtListener("DOMContentLoaded", function () {
+
+            const counters = document.querySelectorAll(".counter-num");
+
+            const observer = new IntersectionObserver((entries, observer) => {
+
+                entries.forEach(entry => {
+
+                    if (!entry.isIntersecting) return;
+
+                    const el = entry.target;
+
+                    // جلوگیری از اجرای مجدد
+                    if (el.dataset.counted === "true") return;
+
+                    el.dataset.counted = "true";
+
+                    const target = parseInt(el.textContent.trim(), 10);
+
+                    let current = 1;
+                    const duration = 1500;
+                    const stepTime = Math.max(20, duration / target);
+
+                    el.textContent = current;
+
+                    const timer = setInterval(() => {
+
+                        current++;
+
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+
+                        el.textContent = current;
+
+                    }, stepTime);
+
+                    observer.unobserve(el);
+                });
+
+            }, {
+                threshold: 0.5
+            });
+
+            counters.forEach(counter => {
+                observer.observe(counter);
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>

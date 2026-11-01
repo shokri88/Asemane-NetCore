@@ -1,0 +1,11 @@
+@model PublicList
+@if (Model.Pages > 1)
+{
+    // لینک‌های صفحه‌بندی برای دسترسی و خزنده‌ها، بدون افزودن کنترل بصری به قالب.
+    <nav class="sr-only" aria-label="Pagination">
+    @for (var pageNumber = 1; pageNumber <= Model.Pages; pageNumber++)
+    {
+        <a href="/@Model.Culture/@Slugs.Segment(Model.Kind)?page=@pageNumber&amp;category=@Model.Category" aria-current="@(pageNumber == Model.Page ? "page" : null)">@pageNumber</a>
+    }
+    </nav>
+}

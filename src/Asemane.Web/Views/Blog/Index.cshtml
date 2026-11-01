@@ -1,9 +1,163 @@
 @model PublicList
-@{ var title = "Journal"; var segment = "journal"; }
-<div class="page-container"><div class="listing-heading"><h1>@title</h1><nav class="category-filters" aria-label="Filter by category"><a href="/@Model.Culture/@segment" class="@(Model.Category is null ? "selected" : "")">All</a>@foreach (var category in Model.Categories) { <a href="/@Model.Culture/@segment?category=@Uri.EscapeDataString(category.Slug)" class="@(Model.Category == category.Slug ? "selected" : "")">@category.Name</a> }</nav></div>
-<div class="project-grid">
-@foreach (var t in Model.Items) { var cover = SiteService.Cover(t.ContentItem); <article class="project-card"><a href="@Slugs.Path(t.Kind,Model.Culture,t.Slug)" class="project-image">@if (cover is not null) { <img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" loading="lazy" width="600" height="600"> } else { <span class="image-placeholder">@t.Title</span> }</a><div class="project-caption"><h2><a href="@Slugs.Path(t.Kind,Model.Culture,t.Slug)">@t.Title</a></h2><p>@t.Summary</p><time datetime="@t.PublishedAt?.ToString("O")">@t.PublishedAt?.ToString("dd MMM yyyy",System.Globalization.CultureInfo.InvariantCulture)</time></div></article> }
-</div>
-@if (Model.Items.Count == 0) { <p class="empty-public">No published content is available in this section yet.</p> }
-<nav class="pagination" aria-label="Pagination">@if (Model.Page > 1) { <a href="/@Model.Culture/@segment?page=@(Model.Page-1)&category=@Uri.EscapeDataString(Model.Category ?? "")">← Previous</a> }<span>Page @Model.Page of @Model.Pages</span>@if (Model.Page < Model.Pages) { <a href="/@Model.Culture/@segment?page=@(Model.Page+1)&category=@Uri.EscapeDataString(Model.Category ?? "")">Next →</a> }</nav>
-</div>
+@inject SiteService SiteService
+@using Microsoft.EntityFrameworkCore
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync();  }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/shop.min.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+    <link rel="stylesheet" href="/template/css/prodet-v1.css">
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Project</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                                <li id="menu-item-6"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!--/END HEADER-->
+    <!--MAIN BODY-->
+<h1 class="sr-only">Journal</h1>
+
+    <div class="container blog-page">
+        <div class="row">
+            <div class="col-md-12">
+                  <!-- Post comments -->
+                <div class="post-comments">
+                    <div class="row">
+
+                        <div class="col-xs-12">
+                            <div class="heading  left dark">
+                                <h2 class="title">Post List</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="prague-comments-list" id="comments">
+                                <ul>
+@foreach (var t in Model.Items) { var cover = SiteService.Cover(t.ContentItem);
+<li class="comment even thread-even depth-1 ct-part" id="li-comment-@t.Id">
+                                        <div class="comm-block" id="comment-@t.Id">
+                                            <div class="comm-img">
+                                                @if (cover is not null) { <img alt="@SiteService.Alt(cover,culture)" src="/media/@cover.Id" class="avatar avatar-80 photo" /> } </div>
+                                            <div class="comm-txt">
+                                                <h4><a href="@Slugs.Path(t.Kind,culture,t.Slug)">@t.Title</a></h4>
+                                                <div class="date-post">
+                                                    <h6>@(t.PublishedAt?.ToString("yyyy-MM-dd"))</h6>
+                                                </div>
+                                                <p>@t.Summary</p>
+                                            </div>
+                                        </div>
+                                    </li>
+}
+</ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- End post comments -->
+            </div>
+        </div>
+
+
+    </div>
+    <partial name="_TemplatePagination" model="Model" />
+<!--/MAIN BODY-->
+
+
+
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/slick.min.js"></script>
+    <script src="/template/js/swiper-bundle.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/all.js"></script>
+
+
+</body>
+
+</html>

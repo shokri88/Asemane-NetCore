@@ -27,3 +27,7 @@
 ## مستندسازی پس از commit
 
 به‌روزرسانی مستندات بخشی از کار توسعه است، نه یک وعده اتوماسیون اجراشونده بعد از هر commit. GitHub Actions، build/test/model validation را اجرا می‌کند. تاریخچه قطعی کد در git و خلاصه رفتار در CHANGELOG/STATUS نگهداری می‌شود.
+
+## الزام جدید حفظ قالب
+
+صفحات عمومی باید HTML و کلاس‌ها و CSS/JS اصلی `Asemane-UI@5c4149ebfb028c19fea918ec638246889607205b` را حفظ کنند. بازطراحی قبلی مورد پذیرش کاربر نیست. فقط جایگذاری داده و SEO مجاز است. checksumها در `template-assets.sha256.json` و تست `OriginalTemplateAssetsAndDynamicSlotsArePreserved` هستند. برای مقایسه نمایشی، داده/تعداد رکورد و تصویر یکسان لازم است؛ دموهای قالب اطلاعات واقعی CMS نیستند.

@@ -152,12 +152,54 @@ public class CmsTests : IAsyncLifetime
             Assert.True(response.IsSuccessStatusCode,path+" "+await response.Content.ReadAsStringAsync());
         }
         var about = await client.GetStringAsync("/en/about");
-        Assert.Contains("Our team",about); Assert.Contains("Test Architect",about);
-        var contact = await client.GetStringAsync("/en/contact"); Assert.Contains("contact-grid",contact); Assert.DoesNotContain("Our team",contact);
-        Assert.DoesNotContain("contact-grid",await client.GetStringAsync("/en/pages/studio-story"));
+        Assert.Contains("about-page",about); Assert.Contains("Test Architect",about);
+        var contact = await client.GetStringAsync("/en/contact"); Assert.Contains("contact-page",contact); Assert.DoesNotContain("Test Architect",contact);
+        Assert.DoesNotContain("contact-page",await client.GetStringAsync("/en/pages/studio-story"));
         var oldAbout = await client.GetAsync("/en/pages/about"); Assert.Equal(HttpStatusCode.MovedPermanently,oldAbout.StatusCode); Assert.Equal("/en/about",oldAbout.Headers.Location!.ToString());
     }
     [Theory] [InlineData(" Garden House! ","garden-house")] [InlineData("---A---B---","a-b")] [InlineData("خانه باغ","خانه-باغ")]
     public void SlugsAreStable(string input,string expected) => Assert.Equal(expected,Slugs.Normalize(input));
     [Fact] public void ImageSignatureDoesNotTrustExtension() => Assert.Null(FileStorage.Detect("<script>alert(1)</script>"u8));
+
+    [Fact] public async Task OriginalTemplateAssetsAndDynamicSlotsArePreserved()
+    {
+        using var scope = factory.Services.CreateScope();
+        var web = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Hosting.IWebHostEnvironment>();
+        var manifestPath = Path.GetFullPath(Path.Combine(web.ContentRootPath,"../../docs/template-assets.sha256.json"));
+        var hashes = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(await File.ReadAllTextAsync(manifestPath))!;
+        Assert.NotEmpty(hashes);
+        foreach (var entry in hashes)
+        {
+            var file = Path.Combine(web.ContentRootPath,"wwwroot/template",entry.Key);
+            Assert.Equal(entry.Value,Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(await File.ReadAllBytesAsync(file))).ToLowerInvariant());
+        }
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var project = await db.Contents.Include(x => x.Translations).SingleAsync(x => x.Translations.Any(t => t.Slug == "garden-house"));
+        project.Translations.Single().ProjectStatus = "Completed";
+        project.Translations.Single().Location = "Published location";
+        project.Images.Add(new MediaAsset { StoredName = "test.png", OriginalName = "test.png", ContentType = "image/png", IsCover = true, Translations = [new MediaTranslation { Alt = "Published cover" }] });
+        db.Contents.Add(new ContentItem { Kind = ContentKind.Team, Translations = [new ContentTranslation { Kind = ContentKind.Team, Slug = "architect", Title = "Template Architect", Summary = "Team biography", Published = true, PublishedAt = DateTimeOffset.UtcNow.AddDays(-1) }] });
+        var settings = await db.Settings.SingleAsync(); settings.Phone = "07111111111;09111111111"; settings.Email = "studio@example.test";
+        await db.SaveChangesAsync();
+        Directory.CreateDirectory(Path.Combine(factory.Root,"uploads"));
+        await File.WriteAllBytesAsync(Path.Combine(factory.Root,"uploads/test.png"),Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a66kAAAAASUVORK5CYII="));
+        var export = Environment.GetEnvironmentVariable("ASEMANE_RENDER_DIR");
+        foreach (var pair in new[] { ("/en","template-home"),("/en/about","template-about"),("/en/contact","template-contact"),("/en/projects","template-grid"),("/en/projects/garden-house","template-project"),("/en/journal","template-blog"),("/en/journal/studio-news","template-article") })
+        {
+            var html = await client.GetStringAsync(pair.Item1);
+            Assert.Contains("prague-header simple sticky-menu sticky-mobile-menu dark",html);
+            Assert.Contains("/template/css/custome-03-03.css",html);
+            Assert.DoesNotContain("/css/site.css",html);
+            Assert.DoesNotContain("/js/site.js",html);
+            Assert.DoesNotContain("Seascape",html);
+            Assert.Single(Regex.Matches(html,"<h1[ >]",RegexOptions.IgnoreCase).Cast<Match>());
+            foreach (Match asset in Regex.Matches(html,"(?:src|href)=\"(/template/[^\"]+)\""))
+                Assert.Equal(HttpStatusCode.OK,(await client.GetAsync(asset.Groups[1].Value)).StatusCode);
+            if (export is not null) { Directory.CreateDirectory(export); await File.WriteAllTextAsync(Path.Combine(export,pair.Item2+".html"),html); }
+        }
+        var home = await client.GetStringAsync("/en"); Assert.Contains("Published cover",home); Assert.Contains("swiper-slide",home);
+        var detail = await client.GetStringAsync("/en/projects/garden-house"); Assert.Contains("Published location",detail); Assert.Contains("id=\"slides\"",detail); Assert.Contains("Published cover",detail);
+        var about = await client.GetStringAsync("/en/about"); Assert.Contains("Template Architect",about); Assert.Contains("counter-num\">1</h6>",about);
+        var contact = await client.GetStringAsync("/en/contact"); Assert.Contains("Shiraz",contact); Assert.Contains("tel:09111111111",contact); Assert.Contains("studio@example.test",contact);
+    }
 }

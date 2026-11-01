@@ -1,12 +1,149 @@
 @model PublicDetail
-@{ var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
-<article class="page-container detail-page">
-<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
-<h1>@t.Title</h1>
-@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
-@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
-<div class="article-byline">@if (t.AuthorName != "") { <span>@t.AuthorName</span> }<time datetime="@t.PublishedAt?.ToString("O")">@t.PublishedAt?.ToString("dd MMM yyyy",System.Globalization.CultureInfo.InvariantCulture)</time></div>
-@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
-<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
-<partial name="_Gallery" model="Model" />
-</article>
+@inject SiteService SiteService
+@using Microsoft.EntityFrameworkCore
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync(); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/shop.min.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+    <link rel="stylesheet" href="/template/css/prodet-v1.css">
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Project</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                                <li id="menu-item-6"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!--/END HEADER-->
+    <!--MAIN BODY-->
+
+    <div class="prodet-page blog-det">
+        <div class="row">
+            <div class="container margin-top">
+                <div class="row-fluid">
+                    <div class="col-sm-12">
+                        <h1 class="header-top">
+                            <i class="fa fa-play"></i>
+                            @t.Title
+                        </h1>
+                        <div class="project-detail-slider-outer">
+                            <div class="project-details-slider-3d">@if (cover is not null) { <img src="/media/@cover.Id" alt="@SiteService.Alt(cover,culture)" fetchpriority="high"> }</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row interior">
+            <div class="container ">
+                <div class="row-fluid ">
+                    <div class="col-sm-12 ">
+                        <div class="heading no-padd-top-bottom left dark">
+                            <div class="content "><partial name="_ContentBody" model="t.Body" /></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--/MAIN BODY-->
+
+
+
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/slick.min.js"></script>
+    <script src="/template/js/swiper-bundle.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/all.js"></script>
+
+
+
+</body>
+
+</html>

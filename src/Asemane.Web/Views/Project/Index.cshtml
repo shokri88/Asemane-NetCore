@@ -1,9 +1,166 @@
 @model PublicList
-@{ var title = "Projects"; var segment = "projects"; }
-<div class="page-container"><div class="listing-heading"><h1>@title</h1><nav class="category-filters" aria-label="Filter by category"><a href="/@Model.Culture/@segment" class="@(Model.Category is null ? "selected" : "")">All</a>@foreach (var category in Model.Categories) { <a href="/@Model.Culture/@segment?category=@Uri.EscapeDataString(category.Slug)" class="@(Model.Category == category.Slug ? "selected" : "")">@category.Name</a> }</nav></div>
-<div class="project-grid">
-@foreach (var t in Model.Items) { var cover = SiteService.Cover(t.ContentItem); <article class="project-card"><a href="@Slugs.Path(t.Kind,Model.Culture,t.Slug)" class="project-image">@if (cover is not null) { <img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" loading="lazy" width="600" height="600"> } else { <span class="image-placeholder">@t.Title</span> }</a><div class="project-caption"><h2><a href="@Slugs.Path(t.Kind,Model.Culture,t.Slug)">@t.Title</a></h2><p>@t.ContentItem.Category?.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Name</p></div></article> }
+@inject SiteService SiteService
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture);  }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+
+
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Projects</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About Us</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                            </ul>
+                        </nav>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+
+
+        </div>
+    </header>
+    <!-- END HEADER -->
+
+
+
+
+    <!--MAIN BODY-->
+<h1 class="sr-only">Projects</h1>
+    <div class="container no-padd margin-lg-145t margin-lg-145b margin-sm-100t margin-sm-70b">
+        <div class="row">
+
+            <div class="prague-dropdown">
+                <a href="#" data-toggle="dropdown" class="dropdown">Filters</a>
+                <ul class="prague-dropdown-menu">
+<li class="active" data-filter="p_f_all"><i class="fa fa-square-o"></i>All Work</li>
+@foreach (var category in Model.Categories) { <li data-filter="p_f_@category.CategoryId"><i class="fa fa-square-o"></i>@category.Name</li> }
+</ul>
+            </div>
+
+            <div class="col-sm-12 no-padd">
+
+                <div data-unique-key="d30797fabd788147235e48099dfaacc0" class="js-load-more" data-start-page="1"
+                    data-max-page="@Model.Pages" data-next-link="/@culture/projects?page=@(Model.Page + 1)">
+                    <div class="row prague_grid prague_count_col4 prague_gap_col15 js-load-more-block no-footer-content prague-load-wrapper"
+                        data-columns="prague_count_col4" data-gap="prague_gap_col15">
+@{ var itemIndex = 0; }
+@foreach (var t in Model.Items) { var cover = SiteService.Cover(t.ContentItem);
+<div
+                            class="portfolio-item-wrapp portfolio-item-paralax js-filter-simple-block p_f_all p_f_@(t.ContentItem.CategoryId) @(itemIndex++ % 3 == 1 ? "column_paralax" : "") ">
+                            <div class="portfolio-item">
+
+                                <div class="project-grid-wrapper">
+
+                                    <a class="project-grid-item-img-link" href="@Slugs.Path(t.Kind,culture,t.Slug)" target="_self">
+                                        <div class="project-grid-item-img">
+                                            @if (cover is not null) { <img src="/media/@cover.Id" class="s-img-switch wp-post-image" alt="@SiteService.Alt(cover,culture)" /> }
+                                        </div>
+                                    </a>
+
+                                    <div class="project-grid-item-content">
+                                        <h4 class="project-grid-item-title"><a href="@Slugs.Path(t.Kind,culture,t.Slug)"
+                                                target="_self">@t.Title</a></h4>
+                                        <div class="project-grid-item-category">@t.Location</div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+}
 </div>
-@if (Model.Items.Count == 0) { <p class="empty-public">No published content is available in this section yet.</p> }
-<nav class="pagination" aria-label="Pagination">@if (Model.Page > 1) { <a href="/@Model.Culture/@segment?page=@(Model.Page-1)&category=@Uri.EscapeDataString(Model.Category ?? "")">← Previous</a> }<span>Page @Model.Page of @Model.Pages</span>@if (Model.Page < Model.Pages) { <a href="/@Model.Culture/@segment?page=@(Model.Page+1)&category=@Uri.EscapeDataString(Model.Category ?? "")">Next →</a> }</nav>
-</div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <partial name="_TemplatePagination" model="Model" />
+<!--/MAIN BODY-->
+
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/vivus.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/all.js"></script>
+    <script src="/template/js/isotope.pkgd.min.js"></script>
+</body>
+
+</html>

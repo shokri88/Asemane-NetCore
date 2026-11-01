@@ -1,12 +1,295 @@
 @model PublicDetail
-@{ var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
-<article class="page-container detail-page">
-<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
-<h1>@t.Title</h1>
-@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
-@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
-<dl class="project-facts">@if (item.Area.HasValue) { <div><dt>Area</dt><dd>@item.Area.Value.ToString("0.##",System.Globalization.CultureInfo.InvariantCulture) m²</dd></div> }@if (item.Year.HasValue) { <div><dt>Year</dt><dd>@item.Year</dd></div> }@if (t.ProjectStatus != "") { <div><dt>Status</dt><dd>@t.ProjectStatus</dd></div> }@if (t.Location != "") { <div><dt>Location</dt><dd>@t.Location</dd></div> }</dl>
-@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
-<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
-<partial name="_Gallery" model="Model" />
-</article>
+@inject SiteService SiteService
+@using Microsoft.EntityFrameworkCore
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync(); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/shop.min.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+    <link rel="stylesheet" href="/template/css/prodet-v1.css">
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Project</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                                <li id="menu-item-6"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!--/END HEADER-->
+    <!--MAIN BODY-->
+
+    <div class="prodet-page">
+        <div class="row">
+            <div class="container no-padd margin-top">
+                <div class="row-fluid">
+                    <div class="col-sm-12 no-padd-inner">
+                        <h1 class="header-top">@t.Title</h1>
+                        <div class="project-detail-slider-outer">
+                            <div class="project-details-slider-3d">@if (cover is not null) { <img src="/media/@cover.Id" alt="@SiteService.Alt(cover,culture)" fetchpriority="high"> }</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container no-padd ">
+                <div class="row-fluid ">
+                    <div class="col-sm-12 no-padd">
+                        <div class="project-detail-block-outer">
+                            <div class="project-detail-block-wrapper">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                    <h6>
+                                        Area :
+                                    </h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            @(item.Area?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)) m²
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-detail-block-wrapper">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                    <h6> Date : </h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            @item.Year
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-detail-block-wrapper">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                    <h6>
+                                        Status :
+                                    </h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            @t.ProjectStatus
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-detail-block-wrapper">
+                                <div class="project-detail-block-item">
+                                    <div class="project-detail-block-title">
+                                    <h6>Location : </h6>
+                                    </div>
+                                    <div class="project-detail-block-descr">
+                                        <p>
+                                            @t.Location
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row interior">
+            <div class="container no-padd">
+                <div class="row-fluid no-padd">
+                    <div class="col-sm-12 no-padd-inner">
+                        <div class="heading no-padd-top-bottom left dark">
+
+                            <div class="subtitle">@t.Subtitle</div>
+                            <h2 class="title">@t.Title</h2>
+                            <div class="content "><partial name="_ContentBody" model="t.Body" /></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row slider-new">
+            <div class="container no-padd">
+                <div class="row-fluid no-padd">
+                    <div class="col-sm-12 no-padd-inner">
+                        <main class="showcase">
+                            <div class="main-image">
+                                <img id="mainPreview" src="@(cover is null ? null : "/media/" + cover.Id)" alt="@(cover is null ? t.Title : SiteService.Alt(cover,culture))">
+                            </div>
+
+                            <div class="thumbs-wrap">
+                                <div class="swiper thumbs-slider">
+                                    <div class="swiper-wrapper" id="slides">@foreach (var image in item.Images.OrderBy(x => x.SortOrder).ThenBy(x => x.Id)) { <div class="swiper-slide"><img src="/media/@image.Id" alt="@SiteService.Alt(image,culture)" loading="lazy"></div> }</div>
+                                </div>
+                                <button class="slider-arrow prev" type="button" aria-label="تصویر قبلی"></button>
+                                <button class="slider-arrow next" type="button" aria-label="تصویر بعدی"></button>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <!--/MAIN BODY-->
+
+
+
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/slick.min.js"></script>
+    <script src="/template/js/swiper-bundle.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/all.js"></script>
+
+@if (item.Images.Count > 0) {
+    <script>
+        const slides = document.getElementById("slides");
+        const preview = document.getElementById("mainPreview");
+
+        /* فقط برای کامل ماندن لوپ در نمایشگرهای عریض، عناصر موجود در HTML
+           تکثیر می‌شوند؛ آدرس هیچ تصویری داخل JavaScript قرار نگرفته است. */
+        const originalSlides = [...slides.children];
+        const originalSlideCount = originalSlides.length;
+        const minimumSlides = Math.ceil(window.innerWidth / 60) * 3;
+
+        while (slides.children.length < minimumSlides) {
+            originalSlides.forEach(slide => slides.appendChild(slide.cloneNode(true)));
+        }
+
+        function changePreview(swiper, immediate = false) {
+            const active = swiper.slides[swiper.activeIndex];
+            if (!active) return;
+            const activeImage = active.querySelector("img");
+            const src = activeImage.currentSrc || activeImage.src;
+            const alt = activeImage.alt || "نمای پروژه";
+
+            if (immediate) {
+                preview.src = src;
+                preview.alt = alt;
+                return;
+            }
+
+            preview.style.opacity = "0";
+            const image = new Image();
+            image.onload = () => {
+                preview.src = src;
+                preview.alt = alt;
+                requestAnimationFrame(() => preview.style.opacity = "1");
+            };
+            image.src = src;
+        }
+
+        const slider = new Swiper(".thumbs-slider", {
+            loop: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            spaceBetween: 9,
+            speed: 600,
+            slideToClickedSlide: true,
+            initialSlide: originalSlideCount + 2,
+            loopAdditionalSlides: originalSlideCount,
+            navigation: { nextEl: ".next", prevEl: ".prev" },
+            keyboard: { enabled: true },
+            on: {
+                init(swiper) {
+                    changePreview(swiper, true);
+                },
+                slideChangeTransitionStart(swiper) {
+                    changePreview(swiper);
+                }
+            }
+        });
+    </script>
+}
+</body>
+
+</html>

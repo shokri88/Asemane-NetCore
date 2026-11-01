@@ -1,27 +1,118 @@
 @inject SiteService SiteService
-@inject SeoService SeoService
-@{
-    var culture = ViewData["Culture"] as string ?? "en";
-    var site = await SiteService.GetAsync(culture);
-    var seo = ViewData["Seo"] as SeoModel ?? new SeoModel { Title = site.Settings.Brand, NoIndex = true };
-    var hasAbout = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync(SiteService.Published(culture,ContentKind.Page).Where(x => x.Slug == "about"));
-    var hasContact = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync(SiteService.Published(culture,ContentKind.Page).Where(x => x.Slug == "contact"));
-}
-<!doctype html><html lang="@culture" dir="@(culture == "fa" ? "rtl" : "ltr")"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>@seo.Title</title><meta name="description" content="@seo.Description"><meta name="robots" content="@(seo.NoIndex ? "noindex,follow" : "index,follow,max-image-preview:large")">
-@if (seo.Canonical != "") { <link rel="canonical" href="@seo.Canonical"> }
-@foreach (var alternate in seo.Alternates) { <link rel="alternate" hreflang="@alternate.Key" href="@alternate.Value"> }
-<meta property="og:title" content="@seo.Title"><meta property="og:description" content="@seo.Description"><meta property="og:type" content="@seo.Type"><meta property="og:url" content="@seo.Canonical"><meta property="og:site_name" content="@site.Settings.Brand">
-@if (seo.Image != "") { <meta property="og:image" content="@seo.Image"><meta name="twitter:card" content="summary_large_image"> } else { <meta name="twitter:card" content="summary"> }
-<meta name="twitter:title" content="@seo.Title"><meta name="twitter:description" content="@seo.Description">
-@if (seo.JsonLd != "") { <script type="application/ld+json">@Html.Raw(seo.JsonLd)</script> }
-<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
-</head><body><a href="#main" class="skip-link">Skip to content</a>
-<header class="site-header"><a href="/@culture" class="studio-brand"><span>@site.Settings.Brand</span><img src="@(site.Settings.LogoId.HasValue ? "/media/"+site.Settings.LogoId : Url.Content("~/theme/logo.png"))" alt="@site.Settings.Brand" width="80" height="80"></a>
-<button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false">Menu <span aria-hidden="true">☰</span></button>
-<nav id="main-nav" aria-label="Main navigation"><a href="/@culture">Home</a><a href="/@culture/projects">Projects</a>@if (hasAbout) { <a href="/@culture/about">About</a> }<a href="/@culture/journal">Journal</a>@if (hasContact) { <a href="/@culture/contact">Contact</a> }</nav></header>
-<main id="main">@RenderBody()</main>
-<footer class="site-footer"><span>© @DateTime.UtcNow.Year @site.Settings.Brand</span>@if (site.Settings.Email != "") { <a href="mailto:@site.Settings.Email">@site.Settings.Email</a> }@if (site.Settings.InstagramUrl != "") { <a href="@site.Settings.InstagramUrl" target="_blank" rel="noopener noreferrer">Instagram ↗</a> }</footer>
-<script src="~/js/site.js" asp-append-version="true" defer></script>@await RenderSectionAsync("Scripts",false)
-</body></html>
+@using Microsoft.EntityFrameworkCore
+@{ var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync();  }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Project</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                                <li id="menu-item-6"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!--/END HEADER-->
+
+@RenderBody()
+
+
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/swiper.min.js"></script>
+    <script src="/template/js/isotope.pkgd.min.js"></script>
+    <script src="/template/js/tweenMax.min.js"></script>
+    <script src="/template/js/vivus.min.js"></script>
+    <script src="/template/js/slick.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/all.js"></script>
+    <script src="/template/js/kenburn.js"></script>
+    <script src="/template/js/jquery.multiscroll.js"></script>
+    <script src="/template/js/countTo.js"></script>
+    <script src="/template/js/skills.js"></script>
+    <script src="/template/js/split-slider.js"></script>
+    <script src="/template/js/banner_slider.js"></script>
+</body>
+
+</html>

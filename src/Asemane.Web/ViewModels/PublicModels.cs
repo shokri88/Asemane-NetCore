@@ -26,6 +26,10 @@ public class PublicDetail
     public string Culture { get; set; } = "en";
     public ContentTranslation Translation { get; set; } = null!;
     public List<ContentTranslation> Team { get; set; } = [];
+    public int TotalProjects { get; set; }
+    public int DesignProjects { get; set; }
+    public int ConstructionProjects { get; set; }
+    public int CompletedProjects { get; set; }
 }
 public class SiteChrome
 {

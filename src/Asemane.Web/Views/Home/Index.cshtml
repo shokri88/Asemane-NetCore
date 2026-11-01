@@ -1,12 +1,156 @@
 @model List<ContentTranslation>
-@{ var culture = ViewData["Culture"] as string ?? "en"; }
-<h1 class="visually-hidden">Architecture and Interior Design — Selected Projects</h1>
-<section class="home-showcase" aria-label="Selected projects">
-@if (Model.Count == 0) { <div class="empty-public"><p class="eyebrow">ASMANE ARCHITECTURAL STUDIO</p><h2>Architecture. Space. People.</h2><p>Our selected projects will be available here soon.</p><a class="text-link" href="/@culture/projects">Explore projects →</a></div> }
-else {
-<div class="showcase-track" id="showcase-track">
-@foreach (var t in Model) { var cover = SiteService.Cover(t.ContentItem); var second = t.ContentItem.Images.OrderBy(x => x.SortOrder).FirstOrDefault(x => x.Id != cover?.Id); var category = t.ContentItem.Category?.Translations.FirstOrDefault(x => x.Culture == culture)?.Name;
-<article class="showcase-card"><a href="@Slugs.Path(t.Kind,culture,t.Slug)" class="showcase-image">@if (cover is not null) { <img src="/media/@cover.Id" alt="@SiteService.Alt(cover,culture)" width="600" height="900" loading="@(t == Model[0] ? "eager" : "lazy")"> } else { <span class="image-placeholder">@t.Title</span> }@if (second is not null) { <img class="secondary-image" src="/media/@second.Id" alt="" width="600" height="900" loading="lazy"> }</a><div class="showcase-caption"><h2><a href="@Slugs.Path(t.Kind,culture,t.Slug)">@t.Title</a></h2><p>@category</p></div></article>
-}</div><div class="showcase-controls"><span>SELECTED WORK</span><div><button data-scroll="-1" aria-label="Previous projects">←</button><button data-scroll="1" aria-label="Next projects">→</button></div></div>
+@inject SiteService SiteService
+@using Microsoft.EntityFrameworkCore
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync();  }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Project</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                                <li id="menu-item-6"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!--/END HEADER-->
+
+    <!--MAIN BODY-->
+<h1 class="sr-only">@chrome.Translation.HomeTitle</h1>
+    <div class="container-fluid no-padd margin-top home-page">
+        <div class="row-fluid no-padd">
+            <div class="col-sm-12 no-padd ">
+                <div class="portfolio-slider-wrap full_showcase_slider showcase_slider ">
+                    <div class="swiper-container" data-mouse="0" data-space="0" data-pagination-type="bullets"
+                        data-mode="horizontal" data-autoplay="5000" data-loop="2" data-speed="1500" data-center="0"
+                        data-responsive="responsive" data-slides-per-view="4" data-xs-slides="1,0" data-sm-slides="2,0"
+                        data-md-slides="3,0" data-lg-slides="4,0">
+
+                        <div class="swiper-wrapper">
+@foreach (var t in Model) {
+    var cover = SiteService.Cover(t.ContentItem);
+    var second = t.ContentItem.Images.OrderBy(x => x.SortOrder).ThenBy(x => x.Id).FirstOrDefault(x => x.Id != cover?.Id);
+    var category = t.ContentItem.Category?.Translations.FirstOrDefault(x => x.Culture == culture);
+<div class="swiper-slide">
+                                <div class="slide-image full-height-window-hard">
+                                    @if (cover is not null) { <span class="images-slider-wrapper"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,culture)" class="s-img-switch"></span> }
+                                    @if (second is not null) { <span class="images-slider-wrapper sec"><img src="/media/@second.Id" alt="@SiteService.Alt(second,culture)" class="s-img-switch"></span> }
+
+                                </div>
+
+                                <div class="content-showcase-wrapper ">
+                                    <div class="slide-title"><a href="@Slugs.Path(t.Kind,culture,t.Slug)" target="_self">@t.Title</a></div>
+                                    <div class="slide-category">@if (category is not null) { <a href="/@culture/projects?category=@category.Slug" rel="tag">@category.Name</a> }</div>
+                                </div>
+                            </div>
 }
-</section>
+</div>
+                        <div class="swiper-button-prev swiper-buttons"></div>
+                        <div class="swiper-button-next swiper-buttons"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/MAIN BODY-->
+
+
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/swiper.min.js"></script>
+    <script src="/template/js/isotope.pkgd.min.js"></script>
+    <script src="/template/js/tweenMax.min.js"></script>
+    <script src="/template/js/vivus.min.js"></script>
+    <script src="/template/js/slick.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/all.js"></script>
+    <script src="/template/js/kenburn.js"></script>
+    <script src="/template/js/jquery.multiscroll.js"></script>
+    <script src="/template/js/countTo.js"></script>
+    <script src="/template/js/skills.js"></script>
+    <script src="/template/js/split-slider.js"></script>
+    <script src="/template/js/banner_slider.js"></script>
+</body>
+
+</html>

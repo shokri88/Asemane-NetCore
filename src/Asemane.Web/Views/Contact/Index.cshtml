@@ -1,13 +1,204 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @model PublicDetail
 @inject SiteService SiteService
-@{ var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); var site = await SiteService.GetAsync(Model.Culture); }
-<article class="page-container detail-page">
-<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
-<h1>@t.Title</h1>
-@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
-@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
-@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
-<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
-<partial name="_Gallery" model="Model" />
-<div class="contact-grid">@if (site.Translation.Address != "") { <section><h2>Address</h2><address>@site.Translation.Address</address>@if (site.Settings.Latitude.HasValue && site.Settings.Longitude.HasValue) { var coordinates = site.Settings.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)+","+site.Settings.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture); <a href="https://www.google.com/maps/search/?api=1&query=@coordinates" target="_blank" rel="noopener noreferrer">Open map ↗</a> }</section> }<section><h2>Contact</h2>@if (site.Settings.Phone != "") { <a href="tel:@site.Settings.Phone">@site.Settings.Phone</a> }@if (site.Settings.Email != "") { <a href="mailto:@site.Settings.Email">@site.Settings.Email</a> }</section>@if (site.Settings.InstagramUrl != "") { <section><h2>Social</h2><a href="@site.Settings.InstagramUrl" target="_blank" rel="noopener noreferrer">Instagram ↗</a></section> }</div>
-</article>
+@{ var mapUrl = Configuration["Site:MapEmbedUrl"];
+if (string.IsNullOrWhiteSpace(mapUrl)) {
+    var settings = (await SiteService.GetAsync(ViewData["Culture"] as string ?? "en")).Settings;
+    if (settings.Latitude.HasValue && settings.Longitude.HasValue)
+        mapUrl = FormattableString.Invariant($"https://www.google.com/maps?q={settings.Latitude},{settings.Longitude}&output=embed");
+}
+Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture);  }
+<!DOCTYPE html>
+<html lang="@culture">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <partial name="_Seo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"> -->
+    <link rel="stylesheet" href="/template/css/swiper.min.css">
+    <link rel="stylesheet" href="/template/css/slick.min.css">
+    <link rel="stylesheet" href="/template/css/magnific-popup.css">
+    <link rel="stylesheet" href="/template/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/template/css/et-line-font.css">
+    <link rel="stylesheet" href="/template/css/before-after.min.css">
+    <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/template/css/unit-test.css">
+    <link rel="stylesheet" href="/template/css/shop.min.css">
+    <link rel="stylesheet" href="/template/css/style.css?v=1">
+
+    <link rel="stylesheet" href="/template/css/custome-03-03.css">
+</head>
+
+<body>
+    <!--PRELOADER-->
+    <div class="prague-loader">
+        <div class="prague-loader-wrapper">
+            <div class="prague-loader-bar">
+                @chrome.Settings.Brand
+            </div>
+        </div>
+    </div>
+    <!--/PRELOADER-->
+
+    <!--HEADER-->
+    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
+
+        <div class="prague-logo">
+            <a href="/@culture">
+                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
+            <p>@chrome.Settings.Brand</p>
+        </div>
+
+        <div class="prague-header-wrapper">
+
+            <div class="prague-navigation">
+                <div class="pargue-navigation-wrapper">
+                    <div class="prague-navigation-inner">
+                        <nav>
+                            <ul class="main-menu">
+                                <li id="menu-item-1"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture">Home</a>
+                                </li>
+                                <li id="menu-item-2"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/projects">Projects</a>
+                                </li>
+                                <li id="menu-item-3"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/about">About Us</a>
+                                </li>
+                                <li id="menu-item-4"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/contact">Contact</a>
+                                </li>
+                                <li id="menu-item-5"
+                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
+                                    <a href="/@culture/journal">Blog</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile icon -->
+            <div class="prague-nav-menu-icon">
+                <a href="#">
+                    <i></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!--/END HEADER-->
+    <!--MAIN BODY-->
+<h1 class="sr-only">@Model.Translation.Title</h1>
+
+    <div class="container-fluid no-padd ">
+        <div class="prodet-page contact-page ">
+            <div class="row">
+                <div class="container no-padd margin-top">
+                    <div class="row-fluid">
+                        <div class="col-sm-12 no-padd-inner">
+                            <div class="project-detail-slider-outer map">
+                                <iframe
+                                    src="@mapUrl"
+                                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                    title="@Model.Translation.Title" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container no-padd ">
+                    <div class="row-fluid ">
+                        <div class="col-sm-12 no-padd">
+                            <div class="project-detail-block-outer">
+                                <div class="project-detail-block-wrapper">
+                                    <div class="project-detail-block-item">
+                                        <div class="project-detail-block-title">
+                                            <h6>
+                                                Address :
+                                            </h6>
+                                        </div>
+                                        <div class="project-detail-block-descr">
+                                            <p>
+                                                @chrome.Translation.Address
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="project-detail-block-wrapper mid">
+                                    <div class="project-detail-block-item">
+                                        <div class="project-detail-block-title">
+                                            <h6> Phone Number : </h6>
+                                        </div>
+                                        <div class="project-detail-block-descr">
+                                            <p class="call">
+                                                @foreach (var phone in chrome.Settings.Phone.Split(new[] { ';', ',', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)) { <a href="tel:@phone">@phone</a> }
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="project-detail-block-item">
+                                        <div class="project-detail-block-title">
+                                            <h6> Postal Code : </h6>
+                                        </div>
+                                        <div class="project-detail-block-descr">
+                                            <p>
+                                                @Configuration["Site:PostalCode"]
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="project-detail-block-wrapper">
+                                    <div class="project-detail-block-item">
+                                        <div class="project-detail-block-title">
+                                            <h6>
+                                                Email :
+                                            </h6>
+                                        </div>
+                                        <div class="project-detail-block-descr">
+                                            <p>
+                                                @chrome.Settings.Email
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="project-detail-block-item">
+                                        <div class="project-detail-block-title">
+                                            <h6>
+                                                Social networks :
+                                            </h6>
+                                        </div>
+                                        <div class="project-detail-block-descr">
+                                            <p>
+                                                @chrome.Settings.InstagramUrl
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--/MAIN BODY-->
+
+
+    <script src="/template/js/jquery.js"></script>
+    <script src="/template/js/slick.min.js"></script>
+    <script src="/template/js/swiper-bundle.min.js"></script>
+    <script src="/template/js/hammer.min.js"></script>
+    <script src="/template/js/foxlazy.min.js"></script>
+    <script src="/template/js/jquery.magnific-popup.min.js"></script>
+    <script src="/template/js/all.js"></script>
+
+</body>
+
+</html>

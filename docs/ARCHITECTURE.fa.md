@@ -32,7 +32,7 @@
 | Services/Slugs.cs | تبدیل عنوان/اسلاگ و مسیر استاندارد هر نوع |
 | Services/Languages.cs | زبان‌های فعال؛ اکنون فقط en |
 | Services/SiteCultureConstraint.cs | جلوگیری از تداخل مسیر زبان با admin و media |
-| Views/Shared | layout، renderer امن متن و Partial گالری |
+| Views/Shared | layout، renderer امن متن، متادیتای مشترک سئو و لینک‌های غیرنمایشی صفحه‌بندی |
 | wwwroot/css, js | استایل‌ها و رفتارهای ساده و محلی |
 | tests/Asemane.Tests | آزمون‌های واحد و یکپارچه با TestServer |
 
@@ -48,7 +48,7 @@
 - چهار نوع محتوا با `ContentKind` در یک جدول مشترک هستند؛ فرم بر اساس نوع، فیلدهای مرتبط را نشان می‌دهد.
 - ردیف‌های ترجمه مستقل‌اند و فارسی بعداً به آن‌ها اضافه می‌شود.
 - منوی سایت، هدر و footer مشترک‌اند؛ مشکل تکرار هدر در HTMLهای قالب حذف شده است.
-- از Swiper/jQuery/Bootstrap 3 قالب قدیمی در عمومی استفاده نشده؛ گالری با JS کوچک و پیمایش native ساخته شده است.
+- طبق درخواست ۲ نوامبر ۲۰۲۶، Swiper/jQuery/Bootstrap و CSS/JS اصلی قالب در `wwwroot/template` بدون ویرایش نگهداری می‌شوند. Viewهای عمومی HTML اصلی را با جایگاه‌های داده Razor رندر می‌کنند؛ بازطراحی یا جایگزینی گالری و منو مجاز نیست.
 - Body یک زیرمجموعه ساده متن ساختاریافته است: پاراگراف، H2، H3 و فهرست. HTML خام ذخیره‌شده اجرا نمی‌شود.
 
 ## ویرایش هم‌زمان
@@ -61,6 +61,6 @@ ContentItem.Version یک Guid و concurrency token است. فرم مقدار ق�
 
 ## قاعده تفکیک صفحه‌ها
 
-Home، About، Contact، Project و Blog باید Controller و پوشه View مستقل داشته باشند. Controller جامع Site و View عمومی همه‌منظوره حذف شده است. هر بخش می‌تواند بدون دست‌زدن به View بخش دیگر تغییر کند. فقط layout، گالری و renderer متن مشترک‌اند؛ PublicContentService صرفاً داده می‌خواند و ActionResult یا نام View برنمی‌گرداند.
+Home، About، Contact، Project و Blog باید Controller و پوشه View مستقل داشته باشند. Controller جامع Site و View عمومی همه‌منظوره حذف شده است. هر بخش می‌تواند بدون دست‌زدن به View بخش دیگر تغییر کند. متادیتای SEO و renderer متن مشترک‌اند؛ گالری جزئیات پروژه همان HTML/JS قالب است. PublicContentService صرفاً داده می‌خواند و ActionResult یا نام View برنمی‌گرداند.
 
 آدرس‌های موجود حفظ شده‌اند: ProjectController از projects و BlogController از journal استفاده می‌کند. این تغییر نیاز به Migration یا ریدایرکت آدرس عمومی جدید ندارد.
