@@ -130,6 +130,33 @@ public class CmsTests : IAsyncLifetime
             if (export is not null) { Directory.CreateDirectory(export); await File.WriteAllTextAsync(Path.Combine(export,pair.Item2+".html"),html); }
         }
     }
+
+    [Fact] public async Task PublicSectionsHaveIndependentControllersAndViews()
+    {
+        using var scope = factory.Services.CreateScope();
+        var actions = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Mvc.Infrastructure.IActionDescriptorCollectionProvider>().ActionDescriptors.Items.OfType<Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor>().ToList();
+        var views = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Mvc.ViewEngines.ICompositeViewEngine>();
+        foreach (var expected in new[] { ("Home","Index","/{culture:siteCulture}"),("About","Index","/{culture:siteCulture}/about"),("Contact","Index","/{culture:siteCulture}/contact"),("Project","Index","/{culture:siteCulture}/projects"),("Project","Details","/{culture:siteCulture}/projects/{slug}"),("Blog","Index","/{culture:siteCulture}/journal"),("Blog","Details","/{culture:siteCulture}/journal/{slug}") })
+        {
+            Assert.Contains(actions,a => a.ControllerName == expected.Item1 && a.ActionName == expected.Item2 && a.AttributeRouteInfo?.Template == expected.Item3.TrimStart('/'));
+            Assert.True(views.GetView(null,$"/Views/{expected.Item1}/{expected.Item2}.cshtml",true).Success);
+        }
+        Assert.DoesNotContain(actions,a => a.ControllerName == "Site");
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        foreach (var kind in new[] { ContentKind.Team, ContentKind.Page })
+            db.Contents.Add(new ContentItem { Kind = kind, Translations = [new ContentTranslation { Kind = kind, Title = kind == ContentKind.Team ? "Test Architect" : "Studio story", Slug = kind == ContentKind.Team ? "architect" : "studio-story", Body = "Independent page.", Published = true, PublishedAt = DateTimeOffset.UtcNow.AddDays(-1) }] });
+        await db.SaveChangesAsync();
+        foreach (var path in new[] { "/en", "/en/about", "/en/contact", "/en/projects", "/en/projects/garden-house", "/en/journal", "/en/journal/studio-news", "/en/team/architect", "/en/pages/studio-story" })
+        {
+            var response = await client.GetAsync(path);
+            Assert.True(response.IsSuccessStatusCode,path+" "+await response.Content.ReadAsStringAsync());
+        }
+        var about = await client.GetStringAsync("/en/about");
+        Assert.Contains("Our team",about); Assert.Contains("Test Architect",about);
+        var contact = await client.GetStringAsync("/en/contact"); Assert.Contains("contact-grid",contact); Assert.DoesNotContain("Our team",contact);
+        Assert.DoesNotContain("contact-grid",await client.GetStringAsync("/en/pages/studio-story"));
+        var oldAbout = await client.GetAsync("/en/pages/about"); Assert.Equal(HttpStatusCode.MovedPermanently,oldAbout.StatusCode); Assert.Equal("/en/about",oldAbout.Headers.Location!.ToString());
+    }
     [Theory] [InlineData(" Garden House! ","garden-house")] [InlineData("---A---B---","a-b")] [InlineData("خانه باغ","خانه-باغ")]
     public void SlugsAreStable(string input,string expected) => Assert.Equal(expected,Slugs.Normalize(input));
     [Fact] public void ImageSignatureDoesNotTrustExtension() => Assert.Null(FileStorage.Detect("<script>alert(1)</script>"u8));

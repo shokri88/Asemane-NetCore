@@ -34,6 +34,7 @@ builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 10 * 1024 * 
 builder.Services.Configure<Microsoft.AspNetCore.Routing.RouteOptions>(o => o.ConstraintMap["siteCulture"] = typeof(SiteCultureConstraint));
 builder.Services.AddScoped<FileStorage>();
 builder.Services.AddScoped<SiteService>();
+builder.Services.AddScoped<PublicContentService>();
 builder.Services.AddScoped<SeoService>();
 var keyPath = builder.Configuration["DataProtection:KeysPath"] ?? "App_Data/Keys";
 var keyDirectory = new DirectoryInfo(Path.GetFullPath(Path.IsPathRooted(keyPath) ? keyPath : Path.Combine(builder.Environment.ContentRootPath,keyPath)));

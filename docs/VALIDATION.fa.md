@@ -7,7 +7,7 @@
 | بررسی | نتیجه |
 |---|---|
 | build پروژه و Razor Viewها | موفق، بدون خطا و هشدار |
-| آزمون‌های xUnit + ASP.NET TestServer | ۱۵ آزمون، همه موفق |
+| آزمون‌های xUnit + ASP.NET TestServer | ۱۶ آزمون، همه موفق |
 | EF pending model changes | بدون تغییر مدل ثبت‌نشده |
 | تولید Initial Migration و SQL idempotent | موفق |
 | ترجمه Query تولیدی به SQL Server و تولید SQL Identity/CMS | موفق؛ بدون اتصال زنده به SQL |
@@ -62,3 +62,7 @@ dotnet list src/Asemane.Web package --vulnerable --include-transitive
 > The job was not started because your account is locked due to a billing issue.
 
 هیچ مرحله Build یا Test روی runner اجرا نشد؛ بنابراین این نتیجه، شکست تست کد نیست و CI موفق روی GitHub نیز ادعا نمی‌شود. ۱۵ تست و Release Build در محیط توسعه موفق بوده‌اند. رفع محدودیت Billing از تنظیمات حساب مالک انجام می‌شود و تغییری در تنظیمات مالی حساب داده نشده است. پس از رفع آن، همین workflow را دوباره اجرا کنید.
+
+## اعتبارسنجی تفکیک Controller و View
+
+پس از تفکیک Home، About، Contact، Project و Blog، Release Build با صفر هشدار و صفر خطا و هر ۱۶ تست موفق شدند. تست جدید مالکیت مسیرها را از ActionDescriptor، وجود View کامپایل‌شده مستقل، رندر هر پنج بخش، فهرست/جزئیات پروژه و بلاگ، صفحات دیگر، تیم و ۳۰۱ مسیر قدیمی about بررسی می‌کند. نمایش تیم فقط در درباره و اطلاعات تماس فقط در تماس نیز بررسی شد. تست‌های قبلی canonical، schema، انتشار، دسترسی و اسلاگ همچنان موفق‌اند. این تغییر فقط ساختار MVC را تغییر می‌دهد و Migration جدید لازم ندارد.

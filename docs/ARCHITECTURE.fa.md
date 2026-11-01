@@ -15,16 +15,24 @@
 | ViewModels/PublicModels.cs | خروجی قابل‌فهم برای View عمومی و متادیتا |
 | Areas/Admin/Controllers | CRUD و کنترل دسترسی پنل |
 | Areas/Admin/Views | Bootstrap RTL، فهرست و فرم جدا، فوتر دکمه‌ها |
-| Controllers/SiteController.cs | صفحه اصلی، فهرست‌ها، جزئیات، ریدایرکت و خطا |
+| Controllers/HomeController.cs + Views/Home | صفحه اصلی با Index مستقل |
+| Controllers/AboutController.cs + Views/About | درباره استودیو و تیم با Index مستقل |
+| Controllers/ContactController.cs + Views/Contact | تماس با Index مستقل |
+| Controllers/ProjectController.cs + Views/Project | Index و Details مستقل پروژه‌ها |
+| Controllers/BlogController.cs + Views/Blog | Index و Details مستقل بلاگ با URL فعلی journal |
+| Controllers/PageController.cs + Views/Page | صفحات محتوایی دیگر؛ بدون مدیریت about/contact |
+| Controllers/TeamController.cs + Views/Team | جزئیات اعضای تیم |
+| Controllers/ErrorController.cs + Views/Error | صفحات خطا و وضعیت |
 | Controllers/MediaController.cs | خواندن تصویر از دیسک با کنترل انتشار |
 | Controllers/SeoController.cs | robots و sitemap زنده از DB |
 | Services/FileStorage.cs | مدیریت نام و مسیر و نوشتن فایل روی سرور |
 | Services/SiteService.cs | Query محتوای منتشرشده و اطلاعات مشترک layout |
+| Services/PublicContentService.cs | خواندن مشترک فهرست/جزئیات، lookup ریدایرکت و ساخت داده سئو؛ بدون انتخاب View |
 | Services/SeoService.cs | canonical، OG و JSON-LD |
 | Services/Slugs.cs | تبدیل عنوان/اسلاگ و مسیر استاندارد هر نوع |
 | Services/Languages.cs | زبان‌های فعال؛ اکنون فقط en |
 | Services/SiteCultureConstraint.cs | جلوگیری از تداخل مسیر زبان با admin و media |
-| Views/Shared | layout عمومی و renderer امن متن |
+| Views/Shared | layout، renderer امن متن و Partial گالری |
 | wwwroot/css, js | استایل‌ها و رفتارهای ساده و محلی |
 | tests/Asemane.Tests | آزمون‌های واحد و یکپارچه با TestServer |
 
@@ -50,3 +58,9 @@ ContentItem.Version یک Guid و concurrency token است. فرم مقدار ق�
 ## مدیریت خطا
 
 در production صفحه عمومی خطا جزئیات exception را نشان نمی‌دهد. وضعیت 404 واقعاً 404 است. خطای اعتبارسنجی کنار فرم/در خلاصه فرم نشان داده می‌شود. لاگ استاندارد ASP.NET Core استفاده شده؛ سرویس ارسال خطا یا پنل ErrorLogs جداگانه هنوز نداریم.
+
+## قاعده تفکیک صفحه‌ها
+
+Home، About، Contact، Project و Blog باید Controller و پوشه View مستقل داشته باشند. Controller جامع Site و View عمومی همه‌منظوره حذف شده است. هر بخش می‌تواند بدون دست‌زدن به View بخش دیگر تغییر کند. فقط layout، گالری و renderer متن مشترک‌اند؛ PublicContentService صرفاً داده می‌خواند و ActionResult یا نام View برنمی‌گرداند.
+
+آدرس‌های موجود حفظ شده‌اند: ProjectController از projects و BlogController از journal استفاده می‌کند. این تغییر نیاز به Migration یا ریدایرکت آدرس عمومی جدید ندارد.

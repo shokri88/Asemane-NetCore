@@ -14,3 +14,5 @@
 12. تغییرات هسته را با dotnet build، dotnet test و بررسی pending model validation بررسی کنید. نتیجه و محدودیت واقعی را در VALIDATION بنویسید.
 13. فایل‌های ایستا فقط wwwroot؛ تصاویر خصوصی پیش‌نویس از مسیر media با کنترل دسترسی سرو می‌شوند.
 14. فاز اول برنامه MVC است؛ API جداگانه و JWT لازم نیست. احراز هویت پنل Cookie + Identity است.
+
+15. Home، About، Contact، Project و Blog هرکدام Controller و View مستقل داشته باشند. آن‌ها را در SiteController یا View عمومی همه‌منظوره ادغام نکنید؛ اشتراک سرویس خواندن داده، layout و partial مجاز است.

@@ -1,0 +1,5 @@
+@model PublicDetail
+@{ var images = Model.Translation.ContentItem.Images.OrderByDescending(x => x.IsCover).ThenBy(x => x.SortOrder).ThenBy(x => x.Id).ToList(); var cover = images.FirstOrDefault(); }
+@if (images.Count > 1) {
+<section class="project-gallery" aria-label="Project image gallery"><h2 class="visually-hidden">Project gallery</h2><figure><img id="gallery-preview" src="/media/@cover!.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" loading="lazy"><figcaption id="gallery-caption">@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure><div class="gallery-thumbs" role="group" aria-label="Choose image">@foreach (var image in images) { var translation = image.Translations.FirstOrDefault(x => x.Culture == Model.Culture); <button type="button" data-image="/media/@image.Id" data-alt="@translation?.Alt" data-caption="@translation?.Caption" aria-label="View image: @translation?.Alt" aria-pressed="@(image.Id == cover!.Id ? "true" : "false")"><img src="/media/@image.Id" alt="" width="120" height="90" loading="lazy"></button> }</div></section>
+}

@@ -24,6 +24,21 @@
 
 زبان نامعتبر/غیرفعال 404 می‌گیرد. صفحه جزئیات منتشرنشده 404 واقعی است. page نامعتبر و دسته ناموجود نیز 404 هستند. صفحه‌های شماره‌دار و فیلترشده noindex دارند؛ canonical فیلتر به فهرست پایه برمی‌گردد.
 
+## مالک مسیر و View عمومی
+
+| Controller | Action | View |
+|---|---|---|
+| HomeController | Index | Views/Home/Index.cshtml |
+| AboutController | Index | Views/About/Index.cshtml |
+| ContactController | Index | Views/Contact/Index.cshtml |
+| ProjectController | Index / Details | Views/Project/Index.cshtml و Details.cshtml |
+| BlogController | Index / Details | Views/Blog/Index.cshtml و Details.cshtml |
+| PageController | Details | Views/Page/Details.cshtml |
+| TeamController | Details | Views/Team/Details.cshtml |
+| ErrorController | Index / Status | Views/Error/Index.cshtml و Status.cshtml |
+
+Controller عمومی Site حذف شده است. نام Controller بلاگ Blog است ولی URL برابر journal باقی مانده تا لینک و سئو تغییر نکند. مسیرهای قدیمی /en/pages/about و /en/pages/contact همچنان ۳۰۱ می‌شوند.
+
 ## مدیریت
 
 | Controller | GET | POST | نقش |

@@ -1,0 +1,13 @@
+@model PublicDetail
+@inject SiteService SiteService
+@{ var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); var site = await SiteService.GetAsync(Model.Culture); }
+<article class="page-container detail-page">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
+<h1>@t.Title</h1>
+@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
+@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
+@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
+<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
+<partial name="_Gallery" model="Model" />
+<div class="contact-grid">@if (site.Translation.Address != "") { <section><h2>Address</h2><address>@site.Translation.Address</address>@if (site.Settings.Latitude.HasValue && site.Settings.Longitude.HasValue) { var coordinates = site.Settings.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)+","+site.Settings.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture); <a href="https://www.google.com/maps/search/?api=1&query=@coordinates" target="_blank" rel="noopener noreferrer">Open map ↗</a> }</section> }<section><h2>Contact</h2>@if (site.Settings.Phone != "") { <a href="tel:@site.Settings.Phone">@site.Settings.Phone</a> }@if (site.Settings.Email != "") { <a href="mailto:@site.Settings.Email">@site.Settings.Email</a> }</section>@if (site.Settings.InstagramUrl != "") { <section><h2>Social</h2><a href="@site.Settings.InstagramUrl" target="_blank" rel="noopener noreferrer">Instagram ↗</a></section> }</div>
+</article>

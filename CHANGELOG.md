@@ -15,3 +15,12 @@
 ### نتیجه CI پس از ثبت
 
 GitHub Actions به‌دلیل پیام قفل Billing حساب، job را شروع نکرد. جزئیات و لینک اجرا در docs/VALIDATION.fa.md ثبت شد؛ Build و ۱۵ تست محیط توسعه موفق‌اند.
+
+## 2026-11-01 — تفکیک بخش‌های عمومی MVC
+
+- حذف SiteController و Views/Site؛ Home، About، Contact، Project و Blog هرکدام Controller و View مستقل دارند.
+- صفحات دیگر، تیم و خطا نیز Controller و View مخصوص دارند.
+- خواندن مشترک داده و سئو به PublicContentService منتقل شد؛ سرویس هیچ View انتخاب نمی‌کند.
+- Partial گالری برای اشتراک جزء بصری کوچک حفظ شد؛ View کامل هر صفحه مستقل است.
+- URLهای فعلی، canonical، انتشار و ۳۰۱ حفظ شدند؛ Migration جدید لازم نیست.
+- تست رندر، مالکیت مسیرها و یافتن View مستقل اضافه و مستندات معماری/مسیرها/تحویل به‌روز شد.

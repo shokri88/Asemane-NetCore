@@ -1,0 +1,11 @@
+@model PublicDetail
+@{ var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
+<article class="page-container detail-page">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
+<h1>@t.Title</h1>
+@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
+@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
+@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
+<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
+<partial name="_Gallery" model="Model" />
+</article>

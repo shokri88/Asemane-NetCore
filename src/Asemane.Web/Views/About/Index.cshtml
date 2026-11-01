@@ -1,0 +1,14 @@
+@model PublicDetail
+@inject SiteService SiteService
+@{ var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); var site = await SiteService.GetAsync(Model.Culture); }
+<article class="page-container detail-page">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/@Model.Culture">Home</a><span>/</span><span>@t.Title</span></nav>
+<h1>@t.Title</h1>
+@if (t.Subtitle != "") { <p class="detail-subtitle">@t.Subtitle</p> }
+@if (cover is not null) { <figure class="detail-hero"><img src="/media/@cover.Id" alt="@SiteService.Alt(cover,Model.Culture)" width="1200" height="750" fetchpriority="high"><figcaption>@cover.Translations.FirstOrDefault(x => x.Culture == Model.Culture)?.Caption</figcaption></figure> }
+@if (t.Summary != "") { <p class="detail-intro">@t.Summary</p> }
+<div class="prose"><partial name="_ContentBody" model="t.Body" /></div>
+<partial name="_Gallery" model="Model" />
+@if (Model.Team.Count > 0) { <section class="team-section"><h2>Our team</h2><div class="team-grid">@foreach (var member in Model.Team) { var portrait = SiteService.Cover(member.ContentItem); <article>@if (portrait is not null) { <a href="@Slugs.Path(member.Kind,Model.Culture,member.Slug)"><img src="/media/@portrait.Id" alt="@SiteService.Alt(portrait,Model.Culture)" width="400" height="500" loading="lazy"></a> }<h3><a href="@Slugs.Path(member.Kind,Model.Culture,member.Slug)">@member.Title</a></h3><p>@member.Subtitle</p></article> }</div></section> }
+<dl class="studio-stats">@if (site.Settings.CompletedProjects > 0) { <div><dd>@site.Settings.CompletedProjects</dd><dt>Completed projects</dt></div> }@if (site.Settings.YearsExperience > 0) { <div><dd>@site.Settings.YearsExperience</dd><dt>Years of experience</dt></div> }@if (site.Settings.TeamCount > 0) { <div><dd>@site.Settings.TeamCount</dd><dt>Team members</dt></div> }</dl>
+</article>

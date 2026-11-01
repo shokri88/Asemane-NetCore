@@ -2,7 +2,7 @@
 
 ## متن آماده برای شروع حساب جدید
 
-> مخزن shokri88/Asemane-NetCore را دریافت کن. ابتدا AGENTS.md، README و docs/STATUS.fa.md، docs/DECISIONS.fa.md و docs/VALIDATION.fa.md را بخوان. معماری MVC ساده، SQL Server، EF Core و Identity را حفظ کن. قالب مرجع shokri88/Asemane-UI است. سایت عمومی فقط انگلیسی است و فارسی برای فاز بعد برنامه‌ریزی شده. فایل‌ها روی سرور خارج wwwroot ذخیره می‌شوند. قبل از تغییر، وضعیت واقعی کد و Migration را بررسی کن؛ کارهای انجام‌شده و کارهای باز را با مستندات تطبیق بده و پس از تغییر، مستندات و تست‌های مرتبط را همان commit به‌روز کن. هیچ رمز یا محتوای واقعی را حدس نزن.
+> مخزن shokri88/Asemane-NetCore را دریافت کن. ابتدا AGENTS.md، README و docs/STATUS.fa.md، docs/DECISIONS.fa.md و docs/VALIDATION.fa.md را بخوان. معماری MVC ساده، SQL Server، EF Core و Identity را حفظ کن. Home/About/Contact/Project/Blog باید Controller و View مستقل داشته باشند. قالب مرجع shokri88/Asemane-UI است. سایت عمومی فقط انگلیسی است و فارسی برای فاز بعد برنامه‌ریزی شده. فایل‌ها روی سرور خارج wwwroot ذخیره می‌شوند. قبل از تغییر، وضعیت واقعی کد و Migration را بررسی کن؛ کارهای انجام‌شده و کارهای باز را با مستندات تطبیق بده و پس از تغییر، مستندات و تست‌های مرتبط را همان commit به‌روز کن. هیچ رمز یا محتوای واقعی را حدس نزن.
 
 ## راه تشخیص وضعیت واقعی
 
