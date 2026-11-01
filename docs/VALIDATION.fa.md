@@ -54,3 +54,11 @@ dotnet list src/Asemane.Web package --vulnerable --include-transitive
 ## بررسی لازم پیش از انتشار عمومی
 
 روی SQL Server واقعی bootstrap را اجرا کنید؛ ایجاد، ویرایش، دسته، آپلود، انتشار، تغییر اسلاگ و سطح دسترسی را با محتوای واقعی بررسی کنید. سپس مسیر پایدار فایل‌ها، backup/restore، HTTPS، کلیدها، دامنه canonical و تنظیم ایندکس را روی هاست مقصد کنترل کنید. امتیاز Lighthouse و SEO رقابتی با داده واقعی هنوز محاسبه نشده است.
+
+## نتیجه اجرای GitHub Actions پس از ثبت کد
+
+اولین workflow روی commit `595e6e0` در [اجرای 41312924912](https://github.com/shokri88/Asemane-NetCore/actions/runs/41312924912) پیش از شروع job متوقف شد. پیام خود GitHub:
+
+> The job was not started because your account is locked due to a billing issue.
+
+هیچ مرحله Build یا Test روی runner اجرا نشد؛ بنابراین این نتیجه، شکست تست کد نیست و CI موفق روی GitHub نیز ادعا نمی‌شود. ۱۵ تست و Release Build در محیط توسعه موفق بوده‌اند. رفع محدودیت Billing از تنظیمات حساب مالک انجام می‌شود و تغییری در تنظیمات مالی حساب داده نشده است. پس از رفع آن، همین workflow را دوباره اجرا کنید.
