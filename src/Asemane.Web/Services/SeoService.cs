@@ -29,7 +29,7 @@ public class SeoService(IConfiguration config)
         var path = Slugs.Path(t.Kind,t.Culture,t.Slug);
         var seo = Page(t.SeoTitle.Length > 0 ? t.SeoTitle : t.Title,t.MetaDescription.Length > 0 ? t.MetaDescription : t.Summary,path,chrome);
         seo.NoIndex |= t.NoIndex;
-        var cover = t.Kind == ContentKind.Project ? SiteService.ProjectImage(t.ContentItem,ImageRole.ProjectBanner) ?? SiteService.ProjectImage(t.ContentItem,ImageRole.ProjectCard) : t.Kind == ContentKind.Team ? SiteService.TeamImage(t.ContentItem,ImageRole.TeamLandscape) ?? SiteService.TeamImage(t.ContentItem,ImageRole.TeamSquare) : t.Kind == ContentKind.Article ? SiteService.ArticleImage(t.ContentItem,ImageRole.ArticleBanner) ?? SiteService.ArticleImage(t.ContentItem,ImageRole.ArticleSquare) : SiteService.Cover(t.ContentItem);
+        var cover = t.Kind == ContentKind.Project ? SiteService.ProjectImage(t.ContentItem,ImageRole.ProjectBanner) ?? SiteService.ProjectImage(t.ContentItem,ImageRole.ProjectCard) : t.Kind == ContentKind.Team ? SiteService.TeamImage(t.ContentItem,ImageRole.TeamLandscape) ?? SiteService.TeamImage(t.ContentItem,ImageRole.TeamSquare) : t.Kind == ContentKind.Article ? SiteService.ArticleImage(t.ContentItem,ImageRole.ArticleBanner) ?? SiteService.ArticleImage(t.ContentItem,ImageRole.ArticleSquare) : SiteService.PageImage(t.ContentItem);
         if (cover is not null) seo.Image = Absolute("/media/"+cover.Id);
         var schema = new Dictionary<string,object?>
         {

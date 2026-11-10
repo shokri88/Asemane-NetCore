@@ -30,7 +30,7 @@ public class SettingsController(AppDbContext db, FileStorage storage) : AdminCon
             {
                 var file = await storage.SaveAsync(model.Logo,ct); newName = file.Name;
                 if (s.LogoId.HasValue) previous = await db.Media.FindAsync([s.LogoId.Value],ct);
-                var asset = new MediaAsset { StoredName = file.Name, OriginalName = "logo", ContentType = file.Mime, Bytes = file.Bytes, Translations = [new MediaTranslation { Alt = model.Brand }] };
+                var asset = new MediaAsset { Role = ImageRole.SiteLogo, StoredName = file.Name, OriginalName = "logo", ContentType = file.Mime, Bytes = file.Bytes, Translations = [new MediaTranslation { Alt = model.Brand }] };
                 db.Media.Add(asset); await db.SaveChangesAsync(ct); s.LogoId = asset.Id;
             }
             s.AboutTotalValue = model.AboutTotalValue; t.AboutTotalTitle = model.AboutTotalTitle.Trim();

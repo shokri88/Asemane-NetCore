@@ -14,7 +14,9 @@ public static class Display
         ImageRole.ProjectCard => "فهرست پروژه‌ها (مربعی)",
         ImageRole.ProjectBanner => "هدر جزئیات پروژه (افقی)",
         ImageRole.ProjectGallery => "گالری پایین پروژه (افقی)",
-        _ => "تصویر عمومی / قدیمی"
+        ImageRole.PageBanner => "بنر افقی صفحه",
+        ImageRole.SiteLogo => "لوگوی سایت",
+        _ => "نوع نامعتبر"
     };
     public static string Persian(object? value) => string.Concat((Convert.ToString(value,CultureInfo.InvariantCulture) ?? "").Select(c => c >= '0' && c <= '9' ? (char)('۰' + c - '0') : c));
     public static string Date(DateTimeOffset value)

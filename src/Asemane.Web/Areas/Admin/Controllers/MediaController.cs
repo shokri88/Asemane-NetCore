@@ -12,7 +12,7 @@ public class MediaController(AppDbContext db, FileStorage storage) : AdminContro
         var item = await db.Contents.AsNoTracking().Include(x => x.Translations).Include(x => x.Images).ThenInclude(x => x.Translations).SingleOrDefaultAsync(x => x.Id == contentId && !x.IsDeleted);
         return item is null ? NotFound() : View(item);
     }
-    [HttpPost] public async Task<IActionResult> Upload(int contentId, IFormFile? file, string alt, CancellationToken ct, ImageRole role = ImageRole.General)
+    [HttpPost] public async Task<IActionResult> Upload(int contentId, IFormFile? file, string alt, CancellationToken ct, ImageRole role)
     {
         var item = await db.Contents.Include(x => x.Images).SingleOrDefaultAsync(x => x.Id == contentId && !x.IsDeleted,ct);
         if (item is null) return NotFound();
@@ -23,7 +23,7 @@ public class MediaController(AppDbContext db, FileStorage storage) : AdminContro
         try
         {
             var saved = await storage.SaveAsync(file,ct);
-            var asset = new MediaAsset { ContentItemId = contentId, StoredName = saved.Name, ContentType = saved.Mime, Bytes = saved.Bytes, OriginalName = Path.GetFileName(file.FileName)[..Math.Min(Path.GetFileName(file.FileName).Length,250)], IsCover = !item.Images.Any(x => x.IsCover), SortOrder = item.Images.Count, Translations = [new MediaTranslation { Alt = alt.Trim() }] };
+            var asset = new MediaAsset { ContentItemId = contentId, StoredName = saved.Name, ContentType = saved.Mime, Bytes = saved.Bytes, OriginalName = Path.GetFileName(file.FileName)[..Math.Min(Path.GetFileName(file.FileName).Length,250)], SortOrder = item.Images.Count, Translations = [new MediaTranslation { Alt = alt.Trim() }] };
             asset.Role = role;
             db.Media.Add(asset);
             try { await db.SaveChangesAsync(ct); } catch { storage.Delete(saved.Name); throw; }
@@ -42,9 +42,7 @@ public class MediaController(AppDbContext db, FileStorage storage) : AdminContro
         if (!MediaRoles.IsAllowed(item.Kind,model.Role)) ModelState.AddModelError(nameof(model.Role),"این نقش برای نوع محتوا مجاز نیست.");
         if (MediaRoles.IsSingle(model.Role) && await db.Media.AnyAsync(x => x.ContentItemId == model.ContentId && x.Role == model.Role && x.Id != image.Id)) ModelState.AddModelError(nameof(model.Role),"این جایگاه قبلاً تصویر دارد.");
         if (!ModelState.IsValid) { TempData["Error"] = "نوع تصویر، جایگاه تکراری، متن جایگزین و ترتیب تصویر را بررسی کنید."; return RedirectToAction(nameof(Index),new { contentId = model.ContentId }); }
-        if (model.IsCover)
-            foreach (var other in await db.Media.Where(x => x.ContentItemId == model.ContentId && x.IsCover).ToListAsync()) other.IsCover = false;
-        image.IsCover = model.IsCover; image.SortOrder = model.SortOrder; image.Role = model.Role;
+        image.SortOrder = model.SortOrder; image.Role = model.Role;
         var t = image.Translations.SingleOrDefault(x => x.Culture == "en");
         if (t is null) { t = new MediaTranslation(); image.Translations.Add(t); }
         t.Alt = model.Alt.Trim(); t.Caption = model.Caption;

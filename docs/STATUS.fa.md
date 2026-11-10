@@ -70,3 +70,7 @@ Migration `20261110104023_ProjectMediaRolesRichTextAndContact` لازم است. 
 ## تصاویر مستقل مقالات
 
 دو جایگاه مربع فهرست و افقی جزئیات مقاله از مدیریت تصاویر قابل انتخاب‌اند. هر جایگاه یکتا و مستقل است؛ تصاویر قدیمی حفظ شده‌اند. Migration IndependentArticleImages لازم است. بیلد و ۳۳ تست موفق و مدل با Migration هماهنگ است.
+
+## حذف تصاویر عمومی / نمونه جدید
+
+وضعیت فعلی نقش عمومی و Cover و fallback ندارد؛ هر جایگاه مستقل است. Migration RemoveUntypedMedia لازم است. بسته نمونه v2 شامل ۲۰ محتوا و ۶۷ تصویر واقعی از قالب با ابعاد نقش مناسب است. reset شامل کاربران است و schema/history را نگه می‌دارد. اسکریپت‌ها در docs/samples/v2 و generator در tools/sample-package هستند؛ داده تست وارد DB واقعی نشده است.

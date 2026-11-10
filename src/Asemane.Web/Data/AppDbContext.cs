@@ -25,9 +25,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         b.Entity<MediaTranslation>().HasIndex(x => new { x.MediaAssetId, x.Culture }).IsUnique();
         b.Entity<MediaAsset>().HasOne(x => x.ContentItem).WithMany(x => x.Images).OnDelete(DeleteBehavior.Restrict);
         // جایگاه‌های تکی پروژه یکتا هستند؛ گالری و تصاویر قدیمی چندتایی می‌مانند.
+        b.Entity<MediaAsset>().ToTable(t => t.HasCheckConstraint("CK_Media_ExplicitRole", "([Role] = 12 AND [ContentItemId] IS NULL) OR ([Role] IN (1,2,3,4,5,6,7,9,10,11) AND [ContentItemId] IS NOT NULL)"));
         b.Entity<MediaAsset>().HasIndex(x => x.ContentItemId);
         b.Entity<MediaAsset>().HasIndex(x => new { x.ContentItemId, x.Role }).IsUnique()
-            .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7,9,10)");
+            .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7,9,10,11)");
         b.Entity<SiteTranslation>().Property(x => x.AboutTotalTitle).HasDefaultValue("All Projects");
         b.Entity<SiteTranslation>().Property(x => x.AboutDesignTitle).HasDefaultValue("Design Development");
         b.Entity<SiteTranslation>().Property(x => x.AboutConstructionTitle).HasDefaultValue("Under Construction");

@@ -89,7 +89,6 @@ public class MediaForm
     [Required, MaxLength(250)] public string Alt { get; set; } = "";
     [MaxLength(300)] public string Caption { get; set; } = "";
     [Range(0,99999)] public int SortOrder { get; set; }
-    public bool IsCover { get; set; }
     [EnumDataType(typeof(ImageRole))] public ImageRole Role { get; set; }
 }
 public class UserForm

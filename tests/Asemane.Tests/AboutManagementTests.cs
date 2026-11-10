@@ -58,21 +58,18 @@ public class AboutManagementTests : IAsyncLifetime
         db.Media.Add(new MediaAsset{ContentItemId=team.Id,Role=ImageRole.TeamSquare,StoredName="duplicate.png"});
         await Assert.ThrowsAsync<DbUpdateException>(()=>db.SaveChangesAsync());
     }
-    [Fact] public async Task RetiredThirdSlotIsPreservedAsGeneralMedia()
+    [Theory] [InlineData(0)] [InlineData(8)]
+    public async Task UndefinedMediaRolesAreRejectedByDatabase(int role)
     {
         using var scope=factory.Services.CreateScope();var db=scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var team=new ContentItem {Kind=ContentKind.Team,Images=[new MediaAsset {Role=(ImageRole)8,StoredName="retired.png"}]};
-        db.Contents.Add(team);await db.SaveChangesAsync();
-        var root=Path.Combine(factory.Root,"uploads");Directory.CreateDirectory(root);var path=Path.Combine(root,"retired.png");await File.WriteAllTextAsync(path,"preserve file");
-        var migration=new Asemane.Web.Data.Migrations.LimitTeamToTwoImages();
-        foreach(var operation in migration.UpOperations.OfType<Microsoft.EntityFrameworkCore.Migrations.Operations.SqlOperation>()) await db.Database.ExecuteSqlRawAsync(operation.Sql);
-        db.ChangeTracker.Clear();var media=await db.Media.SingleAsync();Assert.Equal(ImageRole.General,media.Role);Assert.Equal("retired.png",media.StoredName);Assert.Equal("preserve file",await File.ReadAllTextAsync(path));
+        db.Contents.Add(new ContentItem{Kind=ContentKind.Team,Images=[new MediaAsset{Role=(ImageRole)role,StoredName="invalid.png"}]});
+        await Assert.ThrowsAsync<DbUpdateException>(()=>db.SaveChangesAsync());
     }
-    [Fact] public async Task LegacyTeamCoverStillAppearsInAboutAndMemberPage()
+    [Fact] public async Task TeamSquareDoesNotFallBackToLandscape()
     {
         using var scope=factory.Services.CreateScope();var db=scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var team=new ContentItem{Kind=ContentKind.Team,Translations=[new ContentTranslation{Kind=ContentKind.Team,Slug="legacy-member",Title="Legacy member",Body="Text",Published=true,PublishedAt=DateTimeOffset.UtcNow.AddDays(-1)}],Images=[new MediaAsset{StoredName="legacy.jpg",IsCover=true}]};db.Contents.Add(team);await db.SaveChangesAsync();
+        var team=new ContentItem{Kind=ContentKind.Team,Translations=[new ContentTranslation{Kind=ContentKind.Team,Slug="member",Title="Member",Body="Text",Published=true,PublishedAt=DateTimeOffset.UtcNow.AddDays(-1)}],Images=[new MediaAsset{StoredName="square.jpg",Role=ImageRole.TeamSquare}]};db.Contents.Add(team);await db.SaveChangesAsync();
         var src="src=\"/media/"+team.Images.Single().Id+"\"";
-        Assert.Contains(src,await client.GetStringAsync("/en/about"));Assert.Contains(src,await client.GetStringAsync("/en/team/legacy-member"));
+        Assert.Contains(src,await client.GetStringAsync("/en/about"));Assert.DoesNotContain(src,await client.GetStringAsync("/en/team/member"));
     }
 }

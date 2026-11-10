@@ -66,7 +66,7 @@ public class CmsTests : IAsyncLifetime
         var item = await db.Contents.SingleAsync(x => x.Translations.Any(t => t.Slug == "secret-project"));
         var html = await client.GetStringAsync("/admin/media?contentId="+item.Id);
         using var body = new MultipartFormDataContent();
-        body.Add(new StringContent(Token(html)),"__RequestVerificationToken"); body.Add(new StringContent(item.Id.ToString()),"contentId"); body.Add(new StringContent("Test image"),"alt");
+        body.Add(new StringContent(Token(html)),"__RequestVerificationToken"); body.Add(new StringContent(item.Id.ToString()),"contentId"); body.Add(new StringContent("ProjectGallery"),"role"); body.Add(new StringContent("Test image"),"alt");
         body.Add(new ByteArrayContent(Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a66kAAAAASUVORK5CYII=")),"file","safe.png");
         Assert.Equal(HttpStatusCode.Redirect,(await client.PostAsync("/admin/media/upload",body)).StatusCode);
         var asset = await db.Media.SingleAsync(x => x.ContentItemId == item.Id);
@@ -74,7 +74,7 @@ public class CmsTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.OK,(await client.GetAsync("/media/"+asset.Id)).StatusCode);
         using var anonymous = factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions { BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false });
         Assert.Equal(HttpStatusCode.NotFound,(await anonymous.GetAsync("/media/"+asset.Id)).StatusCode);
-        using var badBody = new MultipartFormDataContent(); badBody.Add(new StringContent(Token(html)),"__RequestVerificationToken"); badBody.Add(new StringContent(item.Id.ToString()),"contentId"); badBody.Add(new StringContent("Bad image"),"alt"); badBody.Add(new ByteArrayContent(Encoding.UTF8.GetBytes("<script>bad</script>")),"file","fake.png");
+        using var badBody = new MultipartFormDataContent(); badBody.Add(new StringContent(Token(html)),"__RequestVerificationToken"); badBody.Add(new StringContent(item.Id.ToString()),"contentId"); badBody.Add(new StringContent("ProjectGallery"),"role"); badBody.Add(new StringContent("Bad image"),"alt"); badBody.Add(new ByteArrayContent(Encoding.UTF8.GetBytes("<script>bad</script>")),"file","fake.png");
         await client.PostAsync("/admin/media/upload",badBody); Assert.Equal(1,await db.Media.CountAsync());
     }
     [Fact] public async Task AdminViewsRenderAndDeletedContentIsNotPublic()
@@ -177,7 +177,7 @@ public class CmsTests : IAsyncLifetime
         var project = await db.Contents.Include(x => x.Translations).SingleAsync(x => x.Translations.Any(t => t.Slug == "garden-house"));
         project.Translations.Single().ProjectStatus = "Completed";
         project.Translations.Single().Location = "Published location";
-        project.Images.Add(new MediaAsset { StoredName = "test.png", OriginalName = "test.png", ContentType = "image/png", IsCover = true, Translations = [new MediaTranslation { Alt = "Published cover" }] });
+        foreach (var role in new[] {ImageRole.HomeFirst,ImageRole.ProjectCard,ImageRole.ProjectBanner}) project.Images.Add(new MediaAsset { Role=role, StoredName = "test.png", OriginalName = "test.png", ContentType = "image/png", Translations = [new MediaTranslation { Alt = "Published cover" }] });
         db.Contents.Add(new ContentItem { Kind = ContentKind.Team, Translations = [new ContentTranslation { Kind = ContentKind.Team, Slug = "architect", Title = "Template Architect", Summary = "Team biography", Published = true, PublishedAt = DateTimeOffset.UtcNow.AddDays(-1) }] });
         var settings = await db.Settings.SingleAsync(); settings.Phone = "07111111111;09111111111"; settings.Email = "studio@example.test";
         await db.SaveChangesAsync();

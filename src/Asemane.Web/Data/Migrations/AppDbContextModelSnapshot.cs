@@ -318,9 +318,6 @@ namespace Asemane.Web.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsCover")
-                        .HasColumnType("bit");
-
                     b.Property<string>("OriginalName")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -343,9 +340,12 @@ namespace Asemane.Web.Data.Migrations
 
                     b.HasIndex("ContentItemId", "Role")
                         .IsUnique()
-                        .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7,9,10)");
+                        .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7,9,10,11)");
 
-                    b.ToTable("Media");
+                    b.ToTable("Media", t =>
+                        {
+                            t.HasCheckConstraint("CK_Media_ExplicitRole", "([Role] = 12 AND [ContentItemId] IS NULL) OR ([Role] IN (1,2,3,4,5,6,7,9,10,11) AND [ContentItemId] IS NOT NULL)");
+                        });
                 });
 
             modelBuilder.Entity("Asemane.Web.Models.MediaTranslation", b =>

@@ -30,7 +30,7 @@ using (var scope = factory.Services.CreateScope())
         var name = Guid.NewGuid().ToString("N")+Path.GetExtension(source);
         var directory = Path.Combine(factory.Root,"uploads"); Directory.CreateDirectory(directory);
         File.Copy(source,Path.Combine(directory,name));
-        item.Images.Add(new MediaAsset { Role=role,StoredName=name,ContentType=name.EndsWith(".webp") ? "image/webp" : "image/jpeg",Bytes=new FileInfo(source).Length,SortOrder=order,IsCover=role==ImageRole.General,Translations=[new MediaTranslation {Alt="Audit image "+role}] });
+        item.Images.Add(new MediaAsset { Role=role,StoredName=name,ContentType=name.EndsWith(".webp") ? "image/webp" : "image/jpeg",Bytes=new FileInfo(source).Length,SortOrder=order,Translations=[new MediaTranslation {Alt="Audit image "+role}] });
     }
     ContentItem New(ContentKind kind,string slug,string title,int order) => new() {Kind=kind,SortOrder=order,Translations=[new ContentTranslation {Kind=kind,Slug=slug,Title=title,Body=body,Summary="Architectural studio description for the original template comparison.",MetaDescription="Audit description",Published=true,PublishedAt=DateTimeOffset.UtcNow.AddDays(-1)}]};
     var first = await db.Contents.Include(x=>x.Translations).SingleAsync(x=>x.Translations.Any(t=>t.Slug=="garden-house"));
@@ -44,10 +44,10 @@ using (var scope = factory.Services.CreateScope())
         if(i==0) for(var j=0;j<10;j++) Image(project,photos[j%photos.Length],ImageRole.ProjectGallery,j);
     }
     var article=await db.Contents.Include(x=>x.Translations).SingleAsync(x=>x.Translations.Any(t=>t.Slug=="studio-news"));
-    article.SortOrder=0;article.Translations[0].Summary="Studio news and architecture projects. A sample summary for the original blog list.";Image(article,avatar,ImageRole.General);
-    for(var i=1;i<3;i++) {var item=New(ContentKind.Article,"audit-article-"+i,"Studio Journal "+i,i);Image(item,avatar,ImageRole.General);db.Contents.Add(item);}
+    article.SortOrder=0;article.Translations[0].Summary="Studio news and architecture projects. A sample summary for the original blog list.";Image(article,avatar,ImageRole.ArticleSquare);Image(article,photos[1],ImageRole.ArticleBanner);
+    for(var i=1;i<3;i++) {var item=New(ContentKind.Article,"audit-article-"+i,"Studio Journal "+i,i);Image(item,avatar,ImageRole.ArticleSquare);Image(item,photos[1],ImageRole.ArticleBanner);db.Contents.Add(item);}
     for(var i=0;i<6;i++) {var member=New(ContentKind.Team,"architect-"+(i+1),"Architect "+(i+1),i);Image(member,avatar,ImageRole.TeamSquare);Image(member,photos[1],ImageRole.TeamLandscape);db.Contents.Add(member);}
-    var page=New(ContentKind.Page,"studio-story","Studio story",0);Image(page,photos[1],ImageRole.General);db.Contents.Add(page);
+    var page=New(ContentKind.Page,"studio-story","Studio story",0);Image(page,photos[1],ImageRole.PageBanner);db.Contents.Add(page);
     var settings=await db.Settings.Include(x=>x.Translations).SingleAsync();settings.AboutTotalValue=40;settings.AboutDesignValue=10;settings.AboutConstructionValue=10;settings.AboutCompletedValue=20;
     settings.Phone="07136301671;09364682225;09365172081";settings.PostalCode="71868-46578";settings.Email="studio@example.test";settings.Translations[0].Address="Studio address, Shiraz, Iran";
     await db.SaveChangesAsync();

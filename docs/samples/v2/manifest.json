@@ -1,0 +1,992 @@
+{
+  "requiredMigration": "20261110150221_RemoveUntypedMedia",
+  "categories": [
+    {
+      "kind": 1,
+      "slug": "demo-v2-residential",
+      "name": "Demo Residential"
+    },
+    {
+      "kind": 1,
+      "slug": "demo-v2-commercial",
+      "name": "Demo Commercial"
+    },
+    {
+      "kind": 2,
+      "slug": "demo-v2-journal",
+      "name": "Demo Journal"
+    }
+  ],
+  "contents": [
+    {
+      "kind": 1,
+      "key": "demo-v2-project-1",
+      "slug": "demo-project-1",
+      "title": "Demo Project 1",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 1.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-residential",
+      "featured": true,
+      "area": 200,
+      "year": 2024,
+      "status": "Design Development",
+      "images": [
+        {
+          "role": 1,
+          "name": "828dcebd1d8557d089a9a4709365bf6f.jpg",
+          "bytes": 91131,
+          "sha256": "e4d6a5ce4ab864fc253fe8fa107979388aac49778f32684a0c7ac6348bcda42f",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 1 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "c6ec181ec0d85419b3a52073b084668e.jpg",
+          "bytes": 143469,
+          "sha256": "c4f36560aa9cde310a6f95ca6cd221e316e14b4df60360c72111879efb9dd226",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 1 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "f4b9f26f81d557dcace85a46e66275e5.jpg",
+          "bytes": 49939,
+          "sha256": "1c6e0c6a5cea2d926873d871fbf36664a7f7a61ee4511de1845286b4ce52c257",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 1 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "19b3e617c3025aabb7612b6a195279c5.jpg",
+          "bytes": 231324,
+          "sha256": "8d9e98fbdda12c885a9389e066e41073fda3872b79572914389112046bd25210",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 1 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "dcb88cc6de1d5547bc487b1652c6b77b.jpg",
+          "bytes": 134713,
+          "sha256": "36dfd81201f70184ad3569bab5aa79a966eec8fd78978744984b1ab185aff15e",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 1 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "7555ebb4942f5ff4a42eece58b37b344.jpg",
+          "bytes": 419658,
+          "sha256": "c15d37f965f512e354ddc88b413d7d0b581d98ad36cda7481dbb903f432fd64b",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 1 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 1,
+      "key": "demo-v2-project-2",
+      "slug": "demo-project-2",
+      "title": "Demo Project 2",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 2.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-commercial",
+      "featured": true,
+      "area": 235,
+      "year": 2025,
+      "status": "Under Construction",
+      "images": [
+        {
+          "role": 1,
+          "name": "5cb1ce4ea9825e88864896ddc47e5ffd.jpg",
+          "bytes": 143469,
+          "sha256": "c4f36560aa9cde310a6f95ca6cd221e316e14b4df60360c72111879efb9dd226",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 2 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "46806db928fc55038489eab9646ea109.jpg",
+          "bytes": 72130,
+          "sha256": "1c1e4242de1a0dfce2cea9b8c65e5fdc7c9cbf2737de570b3a438c52aa8fa9bc",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 2 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "34b14ff871e25bb0b7e92135351e80bb.jpg",
+          "bytes": 71767,
+          "sha256": "abe5357bc9bfbd9293df1639d7dd5e294002ebf9a71b8cc2c903964f1b5424b5",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 2 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "37ef24c80e305fddbf460ad88540a7a4.jpg",
+          "bytes": 134713,
+          "sha256": "36dfd81201f70184ad3569bab5aa79a966eec8fd78978744984b1ab185aff15e",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 2 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "527a57f8a99955e5a9d62d9c3acfb938.jpg",
+          "bytes": 419658,
+          "sha256": "c15d37f965f512e354ddc88b413d7d0b581d98ad36cda7481dbb903f432fd64b",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 2 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "57cc10d460205c4e9439d8c819b53403.jpg",
+          "bytes": 142351,
+          "sha256": "0b1631b41b5576ddac996c826b85c1518e9b29c08a3d5b960ccc21699943dd3b",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 2 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 1,
+      "key": "demo-v2-project-3",
+      "slug": "demo-project-3",
+      "title": "Demo Project 3",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 3.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-residential",
+      "featured": true,
+      "area": 270,
+      "year": 2026,
+      "status": "Completed",
+      "images": [
+        {
+          "role": 1,
+          "name": "35845bcdb2375288b50c89f61c702808.jpg",
+          "bytes": 72130,
+          "sha256": "1c1e4242de1a0dfce2cea9b8c65e5fdc7c9cbf2737de570b3a438c52aa8fa9bc",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 3 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "64cf43b12f14544cb3844bec88325bc9.jpg",
+          "bytes": 92128,
+          "sha256": "6adb0292c9685bf03c034c807f634b5a0285d3f2c21ee69c803ed49cc4ad78e5",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 3 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "d205b9b2101e5bb695097b7487d938d3.jpg",
+          "bytes": 46453,
+          "sha256": "5221f98fce40202f9dccc16dee1ed2c55d562a844846c553cf9c17ed09def205",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 3 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "deaeffb48d25563b9d48a27b71084407.jpg",
+          "bytes": 419658,
+          "sha256": "c15d37f965f512e354ddc88b413d7d0b581d98ad36cda7481dbb903f432fd64b",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 3 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "2ed61f10e54a57a6b902a55570d0e924.jpg",
+          "bytes": 142351,
+          "sha256": "0b1631b41b5576ddac996c826b85c1518e9b29c08a3d5b960ccc21699943dd3b",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 3 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "5b889b502c9158b491089030920478b6.jpg",
+          "bytes": 228005,
+          "sha256": "5a6afad001115c5f2536e5863ba314900215112bf1481fb995856ee130892fa6",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 3 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 1,
+      "key": "demo-v2-project-4",
+      "slug": "demo-project-4",
+      "title": "Demo Project 4",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 4.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-commercial",
+      "featured": true,
+      "area": 305,
+      "year": 2024,
+      "status": "Design Development",
+      "images": [
+        {
+          "role": 1,
+          "name": "d67a5c70514f57609576321b878a8fb3.jpg",
+          "bytes": 92128,
+          "sha256": "6adb0292c9685bf03c034c807f634b5a0285d3f2c21ee69c803ed49cc4ad78e5",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 4 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "adeefc4cdf4b576aa86c2aacd0e1bc84.jpg",
+          "bytes": 66997,
+          "sha256": "dc230248dec9cc17af99b7e54995c0867ba481503450c23e4b3ef97473a13fb5",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 4 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "006842682cb253fb9bf54d1db4e29739.jpg",
+          "bytes": 119963,
+          "sha256": "9b9682bed52053da21d6ee902b5277afdb9233933b758feb9e8e3307c7c4961b",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 4 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "a50cb13c38d45b43ac3e1fb616bdadb9.jpg",
+          "bytes": 142351,
+          "sha256": "0b1631b41b5576ddac996c826b85c1518e9b29c08a3d5b960ccc21699943dd3b",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 4 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "cd886a397ba757b2af4459df7beae71b.jpg",
+          "bytes": 228005,
+          "sha256": "5a6afad001115c5f2536e5863ba314900215112bf1481fb995856ee130892fa6",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 4 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "0a3026703bff54b19083a0930698ed5f.jpg",
+          "bytes": 208354,
+          "sha256": "86a456949de8fccbea255b72aa5469b32f89278fc76e6270fb74894ebbf0d27b",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 4 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 1,
+      "key": "demo-v2-project-5",
+      "slug": "demo-project-5",
+      "title": "Demo Project 5",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 5.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-residential",
+      "featured": true,
+      "area": 340,
+      "year": 2025,
+      "status": "Under Construction",
+      "images": [
+        {
+          "role": 1,
+          "name": "0ff01fa44a97551689edad4a0893d08b.jpg",
+          "bytes": 66997,
+          "sha256": "dc230248dec9cc17af99b7e54995c0867ba481503450c23e4b3ef97473a13fb5",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 5 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "4a4e6b063a4a518d9c18f67b6affd993.jpg",
+          "bytes": 164822,
+          "sha256": "eadca14b149df33feaa3e865cd51bc2bf0ad665c67b837fdd567e4988129fc30",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 5 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "7dc9c7837b16532bbfbc16d35992e9a4.jpg",
+          "bytes": 43033,
+          "sha256": "be604eb8bcb2f4f43fbe5665c82cf42ebe5e25919d71461885fe34d15a0b5d6b",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 5 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "d8826eeae087514fb6ad7290375ab7bd.jpg",
+          "bytes": 228005,
+          "sha256": "5a6afad001115c5f2536e5863ba314900215112bf1481fb995856ee130892fa6",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 5 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "b33353dbc38b574fba3e596b27fc0385.jpg",
+          "bytes": 208354,
+          "sha256": "86a456949de8fccbea255b72aa5469b32f89278fc76e6270fb74894ebbf0d27b",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 5 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "399379a5c33d5065b455785662bbcd6c.jpg",
+          "bytes": 242972,
+          "sha256": "42d6aae8792e1ef17a84c8ab654894c2ba03db2675e03d021c559bbf5014c6c6",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 5 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 1,
+      "key": "demo-v2-project-6",
+      "slug": "demo-project-6",
+      "title": "Demo Project 6",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 6.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-commercial",
+      "featured": true,
+      "area": 375,
+      "year": 2026,
+      "status": "Completed",
+      "images": [
+        {
+          "role": 1,
+          "name": "5c6b7bdc375559c5b9a2f9688c24e81f.jpg",
+          "bytes": 164822,
+          "sha256": "eadca14b149df33feaa3e865cd51bc2bf0ad665c67b837fdd567e4988129fc30",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 6 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "746a7075f5c257b6b5b3b4a54ee5e6f5.jpg",
+          "bytes": 57990,
+          "sha256": "2404c6dfc5e434c10082a5011a3584323a48450b3ddc354908397106394d3104",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 6 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "c3376470e7ff511fb62b3f293a920a58.jpg",
+          "bytes": 68307,
+          "sha256": "2fa3ca18fdcf092bc72b476acb2e9e539a427aaccbbb4abd534d0ae0167a4c3b",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 6 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "66b672fef2d95f7585971e58ea5e98c7.jpg",
+          "bytes": 208354,
+          "sha256": "86a456949de8fccbea255b72aa5469b32f89278fc76e6270fb74894ebbf0d27b",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 6 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "fe96305c4ac4567587417bd71a725854.jpg",
+          "bytes": 242972,
+          "sha256": "42d6aae8792e1ef17a84c8ab654894c2ba03db2675e03d021c559bbf5014c6c6",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 6 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "0b39396fc3635a98846cf823e91f70fe.jpg",
+          "bytes": 268567,
+          "sha256": "4e516b4a6ef101d18924d00b820a85bdaad6c6b834260fd49aeb65ebaef1a422",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 6 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 1,
+      "key": "demo-v2-project-7",
+      "slug": "demo-project-7",
+      "title": "Demo Project 7",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 7.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-residential",
+      "featured": true,
+      "area": 410,
+      "year": 2024,
+      "status": "Design Development",
+      "images": [
+        {
+          "role": 1,
+          "name": "e77064259f555a6d89f19c6207cd299a.jpg",
+          "bytes": 57990,
+          "sha256": "2404c6dfc5e434c10082a5011a3584323a48450b3ddc354908397106394d3104",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 7 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "5c73e2b3663d50a6a434a5e85dccef7f.jpg",
+          "bytes": 96683,
+          "sha256": "a124397133180c6c7d8b043584dcaec616e8548fa810518fd4607d9c248ce728",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 7 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "bba4cdd0cef857eba6b2b1b8f14add32.jpg",
+          "bytes": 65544,
+          "sha256": "286c10c8dd2eb4776c87a678066b54737aac5d2514f31bb3bfe2ea854f5f30a3",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 7 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "1b4eb43a101f51848d2ff82fa00486c1.jpg",
+          "bytes": 242972,
+          "sha256": "42d6aae8792e1ef17a84c8ab654894c2ba03db2675e03d021c559bbf5014c6c6",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 7 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "e231bf0a84475a32986d1b5c87cb94fa.jpg",
+          "bytes": 268567,
+          "sha256": "4e516b4a6ef101d18924d00b820a85bdaad6c6b834260fd49aeb65ebaef1a422",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 7 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "cf0c926ef6e656b4bb2fc8a2a5d84858.jpg",
+          "bytes": 156894,
+          "sha256": "7036e2593627c9ce78304d7f6d902f2d20b37f4a84ddff54019d35ebeb455a80",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 7 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 1,
+      "key": "demo-v2-project-8",
+      "slug": "demo-project-8",
+      "title": "Demo Project 8",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Project 8.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-commercial",
+      "featured": true,
+      "area": 445,
+      "year": 2025,
+      "status": "Under Construction",
+      "images": [
+        {
+          "role": 1,
+          "name": "a4f72a07fcd851019f3420f4bee45d53.jpg",
+          "bytes": 96683,
+          "sha256": "a124397133180c6c7d8b043584dcaec616e8548fa810518fd4607d9c248ce728",
+          "width": 600,
+          "height": 900,
+          "order": 0,
+          "alt": "Demo Project 8 — demo image 1"
+        },
+        {
+          "role": 2,
+          "name": "2f788677a85c5f6abf1b2f262ed4fa7e.jpg",
+          "bytes": 93432,
+          "sha256": "e8275a8fffa5236d9ac179cf78c0429635ba0258e9158017b22755a37472172c",
+          "width": 600,
+          "height": 900,
+          "order": 1,
+          "alt": "Demo Project 8 — demo image 2"
+        },
+        {
+          "role": 3,
+          "name": "46de96496e0e5444b31f89b5e02b9601.jpg",
+          "bytes": 79559,
+          "sha256": "e7b2db5f7296c6ba06ac72995145c4a668191eb8a889547ff55e7d254a07ea4d",
+          "width": 600,
+          "height": 600,
+          "order": 2,
+          "alt": "Demo Project 8 — demo image 3"
+        },
+        {
+          "role": 4,
+          "name": "8439edc278985a80a9783058dedb1042.jpg",
+          "bytes": 268567,
+          "sha256": "4e516b4a6ef101d18924d00b820a85bdaad6c6b834260fd49aeb65ebaef1a422",
+          "width": 1440,
+          "height": 810,
+          "order": 3,
+          "alt": "Demo Project 8 — demo image 4"
+        },
+        {
+          "role": 5,
+          "name": "45cd330f71a25cdc8d0ca1c0110bdb3a.jpg",
+          "bytes": 156894,
+          "sha256": "7036e2593627c9ce78304d7f6d902f2d20b37f4a84ddff54019d35ebeb455a80",
+          "width": 1440,
+          "height": 810,
+          "order": 4,
+          "alt": "Demo Project 8 — demo image 5"
+        },
+        {
+          "role": 5,
+          "name": "0bd361309ad951fbb03727507782862b.jpg",
+          "bytes": 231324,
+          "sha256": "8d9e98fbdda12c885a9389e066e41073fda3872b79572914389112046bd25210",
+          "width": 1440,
+          "height": 810,
+          "order": 5,
+          "alt": "Demo Project 8 — demo image 6"
+        }
+      ]
+    },
+    {
+      "kind": 2,
+      "key": "demo-v2-article-1",
+      "slug": "demo-article-1",
+      "title": "Demo Article 1",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Article 1.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-journal",
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 9,
+          "name": "b30eeabcb422540b850e77ac3781a71b.jpg",
+          "bytes": 65544,
+          "sha256": "286c10c8dd2eb4776c87a678066b54737aac5d2514f31bb3bfe2ea854f5f30a3",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Article 1 — demo image 1"
+        },
+        {
+          "role": 10,
+          "name": "55fb845b54c852fcbe4f1d88688e7d4e.jpg",
+          "bytes": 242972,
+          "sha256": "42d6aae8792e1ef17a84c8ab654894c2ba03db2675e03d021c559bbf5014c6c6",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Article 1 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 2,
+      "key": "demo-v2-article-2",
+      "slug": "demo-article-2",
+      "title": "Demo Article 2",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Article 2.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-journal",
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 9,
+          "name": "61e3d3259a3158c8a995eaa19ae3b553.jpg",
+          "bytes": 79559,
+          "sha256": "e7b2db5f7296c6ba06ac72995145c4a668191eb8a889547ff55e7d254a07ea4d",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Article 2 — demo image 1"
+        },
+        {
+          "role": 10,
+          "name": "86f2f0cc08105eb4a8972fcce0e7a8c8.jpg",
+          "bytes": 268567,
+          "sha256": "4e516b4a6ef101d18924d00b820a85bdaad6c6b834260fd49aeb65ebaef1a422",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Article 2 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 2,
+      "key": "demo-v2-article-3",
+      "slug": "demo-article-3",
+      "title": "Demo Article 3",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Article 3.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": "demo-v2-journal",
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 9,
+          "name": "72d49dc0d5255375921bb52401d3206a.jpg",
+          "bytes": 91750,
+          "sha256": "375189a3967279672440aa607e704d702314ebdb9974eb45e0ddc8b54ad6461b",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Article 3 — demo image 1"
+        },
+        {
+          "role": 10,
+          "name": "64ee52b858aa523483f4ca185dbdb1f7.jpg",
+          "bytes": 156894,
+          "sha256": "7036e2593627c9ce78304d7f6d902f2d20b37f4a84ddff54019d35ebeb455a80",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Article 3 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 4,
+      "key": "demo-v2-team-1",
+      "slug": "demo-member-1",
+      "title": "Demo Member 1",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Member 1.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 6,
+          "name": "b43c7c975d7a5d9d8901ca4c3ec4f87b.jpg",
+          "bytes": 49939,
+          "sha256": "1c6e0c6a5cea2d926873d871fbf36664a7f7a61ee4511de1845286b4ce52c257",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Member 1 — demo image 1"
+        },
+        {
+          "role": 7,
+          "name": "2d54cb06aa78545ea50e5d572c535e95.jpg",
+          "bytes": 231324,
+          "sha256": "8d9e98fbdda12c885a9389e066e41073fda3872b79572914389112046bd25210",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Member 1 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 4,
+      "key": "demo-v2-team-2",
+      "slug": "demo-member-2",
+      "title": "Demo Member 2",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Member 2.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 6,
+          "name": "ad59246e893958909c2eb294c77b4fdc.jpg",
+          "bytes": 71767,
+          "sha256": "abe5357bc9bfbd9293df1639d7dd5e294002ebf9a71b8cc2c903964f1b5424b5",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Member 2 — demo image 1"
+        },
+        {
+          "role": 7,
+          "name": "8fb5e2dd7c7c5e3da3575380299ac8c6.jpg",
+          "bytes": 134713,
+          "sha256": "36dfd81201f70184ad3569bab5aa79a966eec8fd78978744984b1ab185aff15e",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Member 2 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 4,
+      "key": "demo-v2-team-3",
+      "slug": "demo-member-3",
+      "title": "Demo Member 3",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Member 3.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 6,
+          "name": "a728504bfca25f4f84f5ef8f6d9039fe.jpg",
+          "bytes": 46453,
+          "sha256": "5221f98fce40202f9dccc16dee1ed2c55d562a844846c553cf9c17ed09def205",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Member 3 — demo image 1"
+        },
+        {
+          "role": 7,
+          "name": "6cca4e0efcf05b7f8f5cbb356d627306.jpg",
+          "bytes": 419658,
+          "sha256": "c15d37f965f512e354ddc88b413d7d0b581d98ad36cda7481dbb903f432fd64b",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Member 3 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 4,
+      "key": "demo-v2-team-4",
+      "slug": "demo-member-4",
+      "title": "Demo Member 4",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Member 4.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 6,
+          "name": "5d742f5429055913bcc68eae992756e5.jpg",
+          "bytes": 119963,
+          "sha256": "9b9682bed52053da21d6ee902b5277afdb9233933b758feb9e8e3307c7c4961b",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Member 4 — demo image 1"
+        },
+        {
+          "role": 7,
+          "name": "daccfab8461755bf9ae2ac06d6dbe22c.jpg",
+          "bytes": 142351,
+          "sha256": "0b1631b41b5576ddac996c826b85c1518e9b29c08a3d5b960ccc21699943dd3b",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Member 4 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 4,
+      "key": "demo-v2-team-5",
+      "slug": "demo-member-5",
+      "title": "Demo Member 5",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Member 5.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 6,
+          "name": "c77ea39949735a338cfb66166e58b3bb.jpg",
+          "bytes": 43033,
+          "sha256": "be604eb8bcb2f4f43fbe5665c82cf42ebe5e25919d71461885fe34d15a0b5d6b",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Member 5 — demo image 1"
+        },
+        {
+          "role": 7,
+          "name": "ee5434c408535a83bb9f80fc6c02f6aa.jpg",
+          "bytes": 228005,
+          "sha256": "5a6afad001115c5f2536e5863ba314900215112bf1481fb995856ee130892fa6",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Member 5 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 4,
+      "key": "demo-v2-team-6",
+      "slug": "demo-member-6",
+      "title": "Demo Member 6",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Member 6.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 6,
+          "name": "c8faabc53d6a513dbdb9eb862a8c119f.jpg",
+          "bytes": 68307,
+          "sha256": "2fa3ca18fdcf092bc72b476acb2e9e539a427aaccbbb4abd534d0ae0167a4c3b",
+          "width": 600,
+          "height": 600,
+          "order": 0,
+          "alt": "Demo Member 6 — demo image 1"
+        },
+        {
+          "role": 7,
+          "name": "9ad0d4d901b65be4b2de3aecf63d058c.jpg",
+          "bytes": 208354,
+          "sha256": "86a456949de8fccbea255b72aa5469b32f89278fc76e6270fb74894ebbf0d27b",
+          "width": 1440,
+          "height": 810,
+          "order": 1,
+          "alt": "Demo Member 6 — demo image 2"
+        }
+      ]
+    },
+    {
+      "kind": 3,
+      "key": "about",
+      "slug": "about",
+      "title": "About",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for About.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": []
+    },
+    {
+      "kind": 3,
+      "key": "contact",
+      "slug": "contact",
+      "title": "Contact",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Contact.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": []
+    },
+    {
+      "kind": 3,
+      "key": "demo-v2-page",
+      "slug": "demo-studio-story",
+      "title": "Demo Studio Story",
+      "summary": "Development sample only. Replace with approved real content.",
+      "body": "<h2>Development sample</h2><p>This is <strong>demo content</strong> for Demo Studio Story.</p><p>Replace the text and photographs before publishing a real portfolio.</p>",
+      "category": null,
+      "featured": false,
+      "area": null,
+      "year": null,
+      "status": "",
+      "images": [
+        {
+          "role": 11,
+          "name": "0ab46388853958bc8e08b4eac03cb6b5.jpg",
+          "bytes": 134713,
+          "sha256": "36dfd81201f70184ad3569bab5aa79a966eec8fd78978744984b1ab185aff15e",
+          "width": 1440,
+          "height": 810,
+          "order": 0,
+          "alt": "Demo Studio Story — demo image 1"
+        }
+      ]
+    }
+  ],
+  "developmentOnly": true,
+  "noIndex": true
+}

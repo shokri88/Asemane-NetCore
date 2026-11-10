@@ -69,3 +69,7 @@ dotnet ef migrations has-pending-model-changes --project src/Asemane.Web
 [گزارش کامل HTML و استایل](docs/TEMPLATE-AUDIT.fa.md) شامل نتیجه ۹ نمای عمومی در سه عرض و بررسی جداگانه مدیریت/خطاست. ابزار بازتولید در `tools/template-audit` و میزبان SQLite آزمایشی در `tools/TemplateAuditHost` است؛ این ابزارها برای توسعه‌اند و به برنامه production افزوده نشده‌اند.
 
 مقاله‌ها نیز دو تصویر مستقل مربع فهرست و افقی جزئیات دارند؛ در مدیریت تصاویر نقش مناسب را تعیین کنید. Migration `IndependentArticleImages` را پیش از اجرای این نسخه اعمال کنید.
+
+## بسته نمونه نسخه ۲ و حذف تصاویر عمومی
+
+گزینه تصویر عمومی/قدیمی و Cover دیگر وجود ندارند؛ Migration RemoveUntypedMedia را اعمال کنید. برای شروع توسعه از صفر، [راهنمای بسته نمونه v2](docs/samples/v2/README.fa.txt) و اسکریپت‌های همان پوشه را ببینید. reset همه داده‌ها و حساب‌های کاربران را پاک می‌کند و مدیر پس از seed با --bootstrap ساخته می‌شود.

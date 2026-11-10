@@ -37,12 +37,9 @@ public class ArticleImageTests
         db.ChangeTracker.Clear();Assert.Equal(ImageRole.ArticleSquare,(await db.Media.FindAsync(square.Id))!.Role);
         db.Media.Add(new MediaAsset{ContentItemId=article.Id,Role=ImageRole.ArticleBanner,StoredName="duplicate.png"});await Assert.ThrowsAsync<DbUpdateException>(()=>db.SaveChangesAsync());
     }
-    [Fact] public void LegacyArticleImagesRemainAvailableUntilEachSlotIsAssigned()
+    [Fact] public void ArticleSlotsNeverFallBackToAnotherRole()
     {
-        var legacy=new MediaAsset{Id=1,Role=ImageRole.General,IsCover=true};var article=new ContentItem{Kind=ContentKind.Article,Images=[legacy]};
-        Assert.Same(legacy,SiteService.ArticleImage(article,ImageRole.ArticleSquare));Assert.Same(legacy,SiteService.ArticleImage(article,ImageRole.ArticleBanner));
-        var square=new MediaAsset{Id=2,Role=ImageRole.ArticleSquare};article.Images.Add(square);
-        Assert.Same(square,SiteService.ArticleImage(article,ImageRole.ArticleSquare));Assert.Same(legacy,SiteService.ArticleImage(article,ImageRole.ArticleBanner));
-        article.Images.Remove(legacy);Assert.Null(SiteService.ArticleImage(article,ImageRole.ArticleBanner));
+        var square=new MediaAsset{Id=1,Role=ImageRole.ArticleSquare};var article=new ContentItem{Kind=ContentKind.Article,Images=[square]};
+        Assert.Same(square,SiteService.ArticleImage(article,ImageRole.ArticleSquare));Assert.Null(SiteService.ArticleImage(article,ImageRole.ArticleBanner));
     }
 }

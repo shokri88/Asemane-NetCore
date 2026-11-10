@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Asemane.Web.Models;
 
 public enum ContentKind { Project = 1, Article = 2, Page = 3, Team = 4 }
-public enum ImageRole { General = 0, HomeFirst = 1, HomeSecond = 2, ProjectCard = 3, ProjectBanner = 4, ProjectGallery = 5, TeamSquare = 6, TeamLandscape = 7, ArticleSquare = 9, ArticleBanner = 10 }
+public enum ImageRole { HomeFirst = 1, HomeSecond = 2, ProjectCard = 3, ProjectBanner = 4, ProjectGallery = 5, TeamSquare = 6, TeamLandscape = 7, ArticleSquare = 9, ArticleBanner = 10, PageBanner = 11, SiteLogo = 12 }
 public class ApplicationUser : IdentityUser { [MaxLength(100)] public string DisplayName { get; set; } = ""; }
 public class ContentItem
 {
@@ -72,7 +72,6 @@ public class MediaAsset
     [MaxLength(250)] public string OriginalName { get; set; } = "";
     [MaxLength(50)] public string ContentType { get; set; } = "";
     public long Bytes { get; set; }
-    public bool IsCover { get; set; }
     public ImageRole Role { get; set; }
     public int SortOrder { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
