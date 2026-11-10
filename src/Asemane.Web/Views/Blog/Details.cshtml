@@ -1,7 +1,7 @@
 @model PublicDetail
 @inject SiteService SiteService
 @using Microsoft.EntityFrameworkCore
-@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.ArticleImage(item,ImageRole.ArticleBanner); }
 <!DOCTYPE html>
 <html lang="@culture">
 

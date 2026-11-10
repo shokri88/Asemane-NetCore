@@ -67,3 +67,5 @@ dotnet ef migrations has-pending-model-changes --project src/Asemane.Web
 ## تطبیق با قالب اصلی
 
 [گزارش کامل HTML و استایل](docs/TEMPLATE-AUDIT.fa.md) شامل نتیجه ۹ نمای عمومی در سه عرض و بررسی جداگانه مدیریت/خطاست. ابزار بازتولید در `tools/template-audit` و میزبان SQLite آزمایشی در `tools/TemplateAuditHost` است؛ این ابزارها برای توسعه‌اند و به برنامه production افزوده نشده‌اند.
+
+مقاله‌ها نیز دو تصویر مستقل مربع فهرست و افقی جزئیات دارند؛ در مدیریت تصاویر نقش مناسب را تعیین کنید. Migration `IndependentArticleImages` را پیش از اجرای این نسخه اعمال کنید.

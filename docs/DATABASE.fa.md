@@ -67,3 +67,7 @@ SQL idempotent این ارتقا پس از Migration قبلی: `docs/database/20
 ## اصلاح به دو تصویر عضو
 
 پس از AboutStatisticsAndTeamImages، Migration `LimitTeamToTwoImages` را هم اعمال کنید. index یکتای نقش‌ها اکنون ۱،۲،۳،۴،۶،۷ را شامل می‌شود. Role=8 مربوط به عضو تیم به Role=0 عمومی تبدیل می‌شود؛ هیچ فایل یا رکورد رسانه‌ای حذف نمی‌شود. Down فقط index قبلی را برمی‌گرداند و نقش‌های عمومی‌شده را حدس نمی‌زند؛ بازیابی طبقه‌بندی قبلی به backup نیاز دارد. SQL: `docs/database/20261110-team-two-images.sql`.
+
+## تصاویر مستقل مقاله
+
+Migration `20261110131403_IndependentArticleImages` نقش‌های ۹ (مربع مقاله) و ۱۰ (بنر مقاله) را به index یکتای رسانه اضافه می‌کند؛ شماره ۸ بازنشسته‌شده استفاده مجدد نشده است. داده یا فایل موجود تغییر نمی‌کند. SQL idempotent پس از LimitTeamToTwoImages در `docs/database/20261110-independent-article-images.sql` است. قبل از اجرای نسخه جدید، database update لازم است.

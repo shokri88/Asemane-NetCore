@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Asemane.Web.Models;
 
 public enum ContentKind { Project = 1, Article = 2, Page = 3, Team = 4 }
-public enum ImageRole { General = 0, HomeFirst = 1, HomeSecond = 2, ProjectCard = 3, ProjectBanner = 4, ProjectGallery = 5, TeamSquare = 6, TeamLandscape = 7 }
+public enum ImageRole { General = 0, HomeFirst = 1, HomeSecond = 2, ProjectCard = 3, ProjectBanner = 4, ProjectGallery = 5, TeamSquare = 6, TeamLandscape = 7, ArticleSquare = 9, ArticleBanner = 10 }
 public class ApplicationUser : IdentityUser { [MaxLength(100)] public string DisplayName { get; set; } = ""; }
 public class ContentItem
 {
