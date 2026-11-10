@@ -12,7 +12,7 @@ public class SettingsController(AppDbContext db, FileStorage storage) : AdminCon
     [HttpGet] public async Task<IActionResult> Index()
     {
         var s = await db.Settings.AsNoTracking().Include(x => x.Translations).SingleAsync(); var t = s.Translations.Single(x => x.Culture == "en");
-        return View(new SettingsForm { Brand = s.Brand, Phone = s.Phone, PostalCode = s.PostalCode, MapEmbedUrl = s.MapEmbedUrl, Email = s.Email, InstagramUrl = s.InstagramUrl, Latitude = s.Latitude, Longitude = s.Longitude, HomeTitle = t.HomeTitle, HomeDescription = t.HomeDescription, Address = t.Address, LogoId = s.LogoId, CompletedProjects = s.CompletedProjects, YearsExperience = s.YearsExperience, TeamCount = s.TeamCount });
+        return View(new SettingsForm { AboutTotalTitle = t.AboutTotalTitle, AboutTotalValue = s.AboutTotalValue, AboutDesignTitle = t.AboutDesignTitle, AboutDesignValue = s.AboutDesignValue, AboutConstructionTitle = t.AboutConstructionTitle, AboutConstructionValue = s.AboutConstructionValue, AboutCompletedTitle = t.AboutCompletedTitle, AboutCompletedValue = s.AboutCompletedValue, Brand = s.Brand, Phone = s.Phone, PostalCode = s.PostalCode, MapEmbedUrl = s.MapEmbedUrl, Email = s.Email, InstagramUrl = s.InstagramUrl, Latitude = s.Latitude, Longitude = s.Longitude, HomeTitle = t.HomeTitle, HomeDescription = t.HomeDescription, Address = t.Address, LogoId = s.LogoId, CompletedProjects = s.CompletedProjects, YearsExperience = s.YearsExperience, TeamCount = s.TeamCount });
     }
     [HttpPost] public async Task<IActionResult> Index(SettingsForm model, CancellationToken ct)
     {
@@ -33,6 +33,10 @@ public class SettingsController(AppDbContext db, FileStorage storage) : AdminCon
                 var asset = new MediaAsset { StoredName = file.Name, OriginalName = "logo", ContentType = file.Mime, Bytes = file.Bytes, Translations = [new MediaTranslation { Alt = model.Brand }] };
                 db.Media.Add(asset); await db.SaveChangesAsync(ct); s.LogoId = asset.Id;
             }
+            s.AboutTotalValue = model.AboutTotalValue; t.AboutTotalTitle = model.AboutTotalTitle.Trim();
+            s.AboutDesignValue = model.AboutDesignValue; t.AboutDesignTitle = model.AboutDesignTitle.Trim();
+            s.AboutConstructionValue = model.AboutConstructionValue; t.AboutConstructionTitle = model.AboutConstructionTitle.Trim();
+            s.AboutCompletedValue = model.AboutCompletedValue; t.AboutCompletedTitle = model.AboutCompletedTitle.Trim();
             s.PostalCode = model.PostalCode.Trim(); s.MapEmbedUrl = model.MapEmbedUrl.Trim();
             s.Brand = model.Brand; s.Phone = model.Phone ?? ""; s.Email = model.Email ?? ""; s.InstagramUrl = model.InstagramUrl ?? "";
             s.Latitude = model.Latitude; s.Longitude = model.Longitude; s.CompletedProjects = model.CompletedProjects; s.YearsExperience = model.YearsExperience; s.TeamCount = model.TeamCount;

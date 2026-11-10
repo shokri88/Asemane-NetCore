@@ -59,3 +59,5 @@ dotnet ef migrations has-pending-model-changes --project src/Asemane.Web
 ## ارتقای تصاویر، تماس و ویرایشگر HTML
 
 قبل از اجرای نسخه ۱۰ نوامبر، Migration `ProjectMediaRolesRichTextAndContact` را با EF اعمال کنید؛ SQL ارتقا و جزئیات در [دیتابیس](docs/DATABASE.fa.md) آمده است. نقش هر تصویر پروژه از مدیریت تصاویر تعیین می‌شود؛ نمایش در خانه با Featured است. کد پستی و نقشه از تنظیمات قابل ویرایش‌اند. متن‌های اصلی از ویرایشگر HTML محلی با پاک‌سازی سمت سرور استفاده می‌کنند؛ راهنما در [مدیریت](docs/ADMIN-GUIDE.fa.md) است.
+
+برای نسخه جدید About، Migration `AboutStatisticsAndTeamImages` نیز لازم است. عنوان و مقدار چهار شمارنده از بخش «شمارنده‌های صفحه درباره» در تنظیمات مدیریت تغییر می‌کند. تصویر مربع هر عضو در About و دو تصویر افقی در جزئیات عضو نمایش داده می‌شوند. SQL این ارتقا در `docs/database/20261110-about-statistics-team-images.sql` است.

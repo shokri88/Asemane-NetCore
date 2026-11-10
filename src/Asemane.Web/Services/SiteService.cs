@@ -20,6 +20,12 @@ public class SiteService(AppDbContext db)
         .Include(x => x.ContentItem).ThenInclude(x => x.Images).ThenInclude(x => x.Translations);
     }
     public static MediaAsset? Cover(ContentItem item) => item.Images.OrderByDescending(x => x.IsCover).ThenBy(x => x.SortOrder).ThenBy(x => x.Id).FirstOrDefault();
+    public static MediaAsset? TeamImage(ContentItem item, ImageRole role)
+    {
+        var selected = item.Images.FirstOrDefault(x => x.Role == role);
+        if (selected is not null || role == ImageRole.TeamLandscapeSecond) return selected;
+        return item.Images.Where(x => x.Role == ImageRole.General).OrderByDescending(x => x.IsCover).ThenBy(x => x.SortOrder).ThenBy(x => x.Id).FirstOrDefault();
+    }
     public static MediaAsset? ProjectImage(ContentItem item, ImageRole role)
     {
         var selected = item.Images.FirstOrDefault(x => x.Role == role);

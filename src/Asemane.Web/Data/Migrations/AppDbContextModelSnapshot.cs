@@ -343,7 +343,7 @@ namespace Asemane.Web.Data.Migrations
 
                     b.HasIndex("ContentItemId", "Role")
                         .IsUnique()
-                        .HasFilter("[ContentItemId] IS NOT NULL AND [Role] >= 1 AND [Role] <= 4");
+                        .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7,8)");
 
                     b.ToTable("Media");
                 });
@@ -389,6 +389,18 @@ namespace Asemane.Web.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AboutCompletedValue")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AboutConstructionValue")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AboutDesignValue")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AboutTotalValue")
+                        .HasColumnType("int");
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -452,6 +464,34 @@ namespace Asemane.Web.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AboutCompletedTitle")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("Complete");
+
+                    b.Property<string>("AboutConstructionTitle")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("Under Construction");
+
+                    b.Property<string>("AboutDesignTitle")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("Design Development");
+
+                    b.Property<string>("AboutTotalTitle")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("All Projects");
 
                     b.Property<string>("Address")
                         .IsRequired()

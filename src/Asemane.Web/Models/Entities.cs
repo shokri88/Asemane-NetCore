@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Asemane.Web.Models;
 
 public enum ContentKind { Project = 1, Article = 2, Page = 3, Team = 4 }
-public enum ImageRole { General = 0, HomeFirst = 1, HomeSecond = 2, ProjectCard = 3, ProjectBanner = 4, ProjectGallery = 5 }
+public enum ImageRole { General = 0, HomeFirst = 1, HomeSecond = 2, ProjectCard = 3, ProjectBanner = 4, ProjectGallery = 5, TeamSquare = 6, TeamLandscapeFirst = 7, TeamLandscapeSecond = 8 }
 public class ApplicationUser : IdentityUser { [MaxLength(100)] public string DisplayName { get; set; } = ""; }
 public class ContentItem
 {
@@ -99,6 +99,10 @@ public class SiteSettings
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
     public int? LogoId { get; set; }
+    public int? AboutTotalValue { get; set; }
+    public int? AboutDesignValue { get; set; }
+    public int? AboutConstructionValue { get; set; }
+    public int? AboutCompletedValue { get; set; }
     public int CompletedProjects { get; set; }
     public int YearsExperience { get; set; }
     public int TeamCount { get; set; }
@@ -106,6 +110,11 @@ public class SiteSettings
 }
 public class SiteTranslation
 {
+    [MaxLength(100)] public string AboutTotalTitle { get; set; } = "All Projects";
+    [MaxLength(100)] public string AboutDesignTitle { get; set; } = "Design Development";
+    [MaxLength(100)] public string AboutConstructionTitle { get; set; } = "Under Construction";
+    [MaxLength(100)] public string AboutCompletedTitle { get; set; } = "Complete";
+
     public int Id { get; set; }
     public int SiteSettingsId { get; set; }
     public SiteSettings SiteSettings { get; set; } = null!;

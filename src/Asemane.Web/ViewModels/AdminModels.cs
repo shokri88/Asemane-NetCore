@@ -56,6 +56,15 @@ public class CategoryForm
 }
 public class SettingsForm
 {
+    [Required, MaxLength(100)] public string AboutTotalTitle { get; set; } = "All Projects";
+    [Range(0,1000000000)] public int? AboutTotalValue { get; set; }
+    [Required, MaxLength(100)] public string AboutDesignTitle { get; set; } = "Design Development";
+    [Range(0,1000000000)] public int? AboutDesignValue { get; set; }
+    [Required, MaxLength(100)] public string AboutConstructionTitle { get; set; } = "Under Construction";
+    [Range(0,1000000000)] public int? AboutConstructionValue { get; set; }
+    [Required, MaxLength(100)] public string AboutCompletedTitle { get; set; } = "Complete";
+    [Range(0,1000000000)] public int? AboutCompletedValue { get; set; }
+
     [Required, MaxLength(150)] public string Brand { get; set; } = "";
     [MaxLength(200)] public string? Phone { get; set; }
     [MaxLength(30)] public string PostalCode { get; set; } = "";

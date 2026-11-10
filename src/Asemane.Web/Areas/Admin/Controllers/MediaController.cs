@@ -16,8 +16,8 @@ public class MediaController(AppDbContext db, FileStorage storage) : AdminContro
     {
         var item = await db.Contents.Include(x => x.Images).SingleOrDefaultAsync(x => x.Id == contentId && !x.IsDeleted,ct);
         if (item is null) return NotFound();
-        if (!ModelState.IsValid || !Enum.IsDefined(role) || (item.Kind != ContentKind.Project && role != ImageRole.General)) return BadRequest();
-        if (IsSingle(role) && item.Images.Any(x => x.Role == role))
+        if (!ModelState.IsValid || !MediaRoles.IsAllowed(item.Kind,role)) return BadRequest();
+        if (MediaRoles.IsSingle(role) && item.Images.Any(x => x.Role == role))
         { TempData["Error"] = "این جایگاه قبلاً تصویر دارد؛ ابتدا نقش تصویر قبلی را تغییر دهید یا آن را حذف کنید."; return RedirectToAction(nameof(Index),new { contentId }); }
         if (file is null || string.IsNullOrWhiteSpace(alt) || alt.Length > 250) { TempData["Error"] = "تصویر و متن جایگزین معتبر الزامی است."; return RedirectToAction(nameof(Index),new { contentId }); }
         try
@@ -39,9 +39,9 @@ public class MediaController(AppDbContext db, FileStorage storage) : AdminContro
         if (image is null) return NotFound();
         var item = await db.Contents.SingleOrDefaultAsync(x => x.Id == model.ContentId && !x.IsDeleted);
         if (item is null) return NotFound();
-        if (item.Kind != ContentKind.Project && model.Role != ImageRole.General) ModelState.AddModelError(nameof(model.Role),"این نقش فقط برای پروژه است.");
-        if (IsSingle(model.Role) && await db.Media.AnyAsync(x => x.ContentItemId == model.ContentId && x.Role == model.Role && x.Id != image.Id)) ModelState.AddModelError(nameof(model.Role),"این جایگاه قبلاً تصویر دارد.");
-        if (!ModelState.IsValid) { TempData["Error"] = "متن جایگزین و ترتیب تصویر را بررسی کنید."; return RedirectToAction(nameof(Index),new { contentId = model.ContentId }); }
+        if (!MediaRoles.IsAllowed(item.Kind,model.Role)) ModelState.AddModelError(nameof(model.Role),"این نقش برای نوع محتوا مجاز نیست.");
+        if (MediaRoles.IsSingle(model.Role) && await db.Media.AnyAsync(x => x.ContentItemId == model.ContentId && x.Role == model.Role && x.Id != image.Id)) ModelState.AddModelError(nameof(model.Role),"این جایگاه قبلاً تصویر دارد.");
+        if (!ModelState.IsValid) { TempData["Error"] = "نوع تصویر، جایگاه تکراری، متن جایگزین و ترتیب تصویر را بررسی کنید."; return RedirectToAction(nameof(Index),new { contentId = model.ContentId }); }
         if (model.IsCover)
             foreach (var other in await db.Media.Where(x => x.ContentItemId == model.ContentId && x.IsCover).ToListAsync()) other.IsCover = false;
         image.IsCover = model.IsCover; image.SortOrder = model.SortOrder; image.Role = model.Role;
@@ -60,5 +60,4 @@ public class MediaController(AppDbContext db, FileStorage storage) : AdminContro
         db.Media.Remove(asset); await db.SaveChangesAsync(); storage.Delete(asset.StoredName);
         Success("تصویر حذف شد."); return RedirectToAction(nameof(Index),new { contentId });
     }
-    private static bool IsSingle(ImageRole role) => role is >= ImageRole.HomeFirst and <= ImageRole.ProjectBanner;
 }

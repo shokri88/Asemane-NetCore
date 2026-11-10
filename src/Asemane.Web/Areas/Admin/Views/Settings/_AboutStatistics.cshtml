@@ -1,0 +1,13 @@
+@model SettingsForm
+<div class="card mb-4"><div class="card-header">شمارنده‌های صفحه درباره</div><div class="card-body">
+<p class="form-text">چهار جایگاه قالب اصلی حفظ می‌شوند. عنوان‌ها قابل ویرایش‌اند؛ عدد خالی باشد از پروژه‌های منتشرشده محاسبه می‌شود. صفر یک مقدار دستی معتبر است.</p>
+<div class="row g-3">
+<div class="col-md-6"><label asp-for="AboutTotalTitle" class="form-label">عنوان شمارنده 1</label><input asp-for="AboutTotalTitle" class="form-control" dir="ltr" maxlength="100" required><span asp-validation-for="AboutTotalTitle" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="AboutTotalValue" class="form-label">عدد شمارنده 1</label><input asp-for="AboutTotalValue" class="form-control" dir="ltr" type="number" min="0" max="1000000000" placeholder="خالی = خودکار"><span asp-validation-for="AboutTotalValue" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="AboutDesignTitle" class="form-label">عنوان شمارنده 2</label><input asp-for="AboutDesignTitle" class="form-control" dir="ltr" maxlength="100" required><span asp-validation-for="AboutDesignTitle" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="AboutDesignValue" class="form-label">عدد شمارنده 2</label><input asp-for="AboutDesignValue" class="form-control" dir="ltr" type="number" min="0" max="1000000000" placeholder="خالی = خودکار"><span asp-validation-for="AboutDesignValue" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="AboutConstructionTitle" class="form-label">عنوان شمارنده 3</label><input asp-for="AboutConstructionTitle" class="form-control" dir="ltr" maxlength="100" required><span asp-validation-for="AboutConstructionTitle" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="AboutConstructionValue" class="form-label">عدد شمارنده 3</label><input asp-for="AboutConstructionValue" class="form-control" dir="ltr" type="number" min="0" max="1000000000" placeholder="خالی = خودکار"><span asp-validation-for="AboutConstructionValue" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="AboutCompletedTitle" class="form-label">عنوان شمارنده 4</label><input asp-for="AboutCompletedTitle" class="form-control" dir="ltr" maxlength="100" required><span asp-validation-for="AboutCompletedTitle" class="field-error"></span></div>
+<div class="col-md-6"><label asp-for="AboutCompletedValue" class="form-label">عدد شمارنده 4</label><input asp-for="AboutCompletedValue" class="form-control" dir="ltr" type="number" min="0" max="1000000000" placeholder="خالی = خودکار"><span asp-validation-for="AboutCompletedValue" class="field-error"></span></div>
+</div></div></div>

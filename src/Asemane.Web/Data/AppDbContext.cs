@@ -27,7 +27,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         // جایگاه‌های تکی پروژه یکتا هستند؛ گالری و تصاویر قدیمی چندتایی می‌مانند.
         b.Entity<MediaAsset>().HasIndex(x => x.ContentItemId);
         b.Entity<MediaAsset>().HasIndex(x => new { x.ContentItemId, x.Role }).IsUnique()
-            .HasFilter("[ContentItemId] IS NOT NULL AND [Role] >= 1 AND [Role] <= 4");
+            .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7,8)");
+        b.Entity<SiteTranslation>().Property(x => x.AboutTotalTitle).HasDefaultValue("All Projects");
+        b.Entity<SiteTranslation>().Property(x => x.AboutDesignTitle).HasDefaultValue("Design Development");
+        b.Entity<SiteTranslation>().Property(x => x.AboutConstructionTitle).HasDefaultValue("Under Construction");
+        b.Entity<SiteTranslation>().Property(x => x.AboutCompletedTitle).HasDefaultValue("Complete");
         b.Entity<SiteTranslation>().HasIndex(x => new { x.SiteSettingsId, x.Culture }).IsUnique();
         b.Entity<SiteSettings>().Property(x => x.Latitude).HasPrecision(9, 6);
         b.Entity<SiteSettings>().Property(x => x.Longitude).HasPrecision(9, 6);

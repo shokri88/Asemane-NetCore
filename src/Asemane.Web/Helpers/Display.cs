@@ -5,6 +5,9 @@ public static class Display
 {
     public static string ImageType(ImageRole role) => role switch
     {
+        ImageRole.TeamSquare => "عضو تیم — تصویر مربعی اصلی",
+        ImageRole.TeamLandscapeFirst => "عضو تیم — تصویر افقی اول",
+        ImageRole.TeamLandscapeSecond => "عضو تیم — تصویر افقی دوم",
         ImageRole.HomeFirst => "خانه — تصویر اول (عمودی)",
         ImageRole.HomeSecond => "خانه — تصویر دوم (عمودی)",
         ImageRole.ProjectCard => "فهرست پروژه‌ها (مربعی)",
