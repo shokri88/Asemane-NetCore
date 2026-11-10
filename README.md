@@ -63,3 +63,7 @@ dotnet ef migrations has-pending-model-changes --project src/Asemane.Web
 برای نسخه جدید About، Migration `AboutStatisticsAndTeamImages` نیز لازم است. عنوان و مقدار چهار شمارنده از بخش «شمارنده‌های صفحه درباره» در تنظیمات مدیریت تغییر می‌کند. تصویر مربع هر عضو در About و یک تصویر افقی در جزئیات عضو نمایش داده می‌شوند. SQL این ارتقا در `docs/database/20261110-about-statistics-team-images.sql` است.
 
 طبق پاسخ نهایی کاربر تعداد تصاویر عضو دو است. Migration تکمیلی `LimitTeamToTwoImages` نیز لازم است؛ داده جایگاه سوم قبلی با حفظ فایل به تصویر عمومی تبدیل می‌شود.
+
+## تطبیق با قالب اصلی
+
+[گزارش کامل HTML و استایل](docs/TEMPLATE-AUDIT.fa.md) شامل نتیجه ۹ نمای عمومی در سه عرض و بررسی جداگانه مدیریت/خطاست. ابزار بازتولید در `tools/template-audit` و میزبان SQLite آزمایشی در `tools/TemplateAuditHost` است؛ این ابزارها برای توسعه‌اند و به برنامه production افزوده نشده‌اند.

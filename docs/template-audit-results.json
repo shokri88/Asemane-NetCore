@@ -1,0 +1,236 @@
+{
+  "reference_repository": "shokri88/Asemane-UI",
+  "reference_commit": "5c4149ebfb028c19fea918ec638246889607205b",
+  "viewport_widths": [
+    1440,
+    768,
+    390
+  ],
+  "vendor_files_verified": 85,
+  "pages": {
+    "home": {
+      "template": "index.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "about": {
+      "template": "about.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "contact": {
+      "template": "contact.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "projects": {
+      "template": "workgrid.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "project": {
+      "template": "workdet.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "blog": {
+      "template": "blog.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "article": {
+      "template": "blogdet.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "page": {
+      "template": "blogdet.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    },
+    "team": {
+      "template": "blogdet.html",
+      "structure": "match",
+      "vendor_order": "match",
+      "screenshots": [
+        {
+          "width": 1440,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 768,
+          "identical": true,
+          "bounds": null
+        },
+        {
+          "width": 390,
+          "identical": true,
+          "bounds": null
+        }
+      ]
+    }
+  },
+  "runtime": {
+    "public_cases": 27,
+    "admin_views": 12,
+    "admin_states": 13,
+    "admin_viewport_cases": 26,
+    "special_cases": 4,
+    "javascript_errors": 0,
+    "missing_local_assets": 0,
+    "horizontal_overflow_cases": 0
+  },
+  "dotnet": {
+    "release_build": "passed, zero warnings/errors",
+    "tests_passed": 31,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "pending_model_changes": false
+  },
+  "limits": [
+    "same fixture data substituted into independent original markup",
+    "five-item navigation preserved from prior explicit request",
+    "SEO-only invisible nodes and record metadata normalized",
+    "static pixel checks exclude scripts/loaders on both sides; runtime checked separately",
+    "admin/error pages have no supplied original HTML",
+    "external Google Maps content blocked in local tests",
+    "SQL Server migrations not executed in this audit"
+  ]
+}

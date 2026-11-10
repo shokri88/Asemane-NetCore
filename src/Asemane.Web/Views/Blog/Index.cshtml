@@ -67,7 +67,7 @@
                                             <div class="comm-img">
                                                 @if (cover is not null) { <img alt="@SiteService.Alt(cover,culture)" src="/media/@cover.Id" class="avatar avatar-80 photo" /> } </div>
                                             <div class="comm-txt">
-                                                <h4><a href="@Slugs.Path(t.Kind,culture,t.Slug)">@t.Title</a></h4>
+                                                <h4><a style="font:inherit" href="@Slugs.Path(t.Kind,culture,t.Slug)">@t.Title</a></h4>
                                                 <div class="date-post">
                                                     <h6>@(t.PublishedAt?.ToString("yyyy-MM-dd"))</h6>
                                                 </div>
