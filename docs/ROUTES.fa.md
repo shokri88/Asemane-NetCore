@@ -61,3 +61,7 @@ Controller عمومی Site حذف شده است. نام Controller بلاگ Blog
 - ReturnUrl ورود فقط با Url.IsLocalUrl پذیرفته می‌شود.
 - در انتشار متن اصلی و توضیحات متا الزامی‌اند. title/slug همیشه الزامی‌اند.
 - SQL unique index رقابت هم‌زمان روی slug را نیز کنترل می‌کند؛ فقط بررسی JavaScript نداریم.
+
+## فیلتر پروژه — ۱۰ نوامبر ۲۰۲۶
+
+کنترل Filters قالب به GET `/en/projects?category={slug}` متصل است و «All Work» به `/en/projects` برمی‌گردد. شمارش و صفحه‌بندی پس از فیلتر روی کل داده منتشرشده انجام می‌شود؛ لینک‌های صفحه‌بندی پارامتر category را حفظ می‌کنند. Media Upload/Update پارامتر Role را نیز می‌پذیرند. API عمومی جدیدی اضافه نشده است.

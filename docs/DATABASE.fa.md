@@ -51,3 +51,9 @@ Bootstrap نقش‌ها/مدیر/صفحات پایه را نیز ایجاد می
 ## داده آزمون
 
 TestDbContext داخل پروژه تست از SQLite و تبدیل DateTimeOffset فقط برای تست استفاده می‌کند؛ این کلاس و seedهای آزمایشی وارد DbContext اصلی یا DB production نمی‌شوند. سازگاری SQL Server علاوه بر تست قابل‌حمل باید روی SQL Server واقعی بررسی شود.
+
+## ارتقای ۱۰ نوامبر ۲۰۲۶
+
+Migration جدید `20261110104023_ProjectMediaRolesRichTextAndContact` ستون‌های `Media.Role` (پیش‌فرض عمومی=0)، `ContentTranslations.BodyIsHtml` (پیش‌فرض false)، `Settings.PostalCode` و `Settings.MapEmbedUrl` (خالی) را اضافه و Phone را از ۵۰ به ۲۰۰ نویسه گسترش می‌دهد. index یکتای فیلترشده فقط برای نقش‌های ۱ تا ۴ پروژه و index غیر یکتای قبلی برای lookup همه تصاویر حفظ می‌شود. داده‌های قدیمی حذف یا بازنویسی نمی‌شوند.
+
+SQL idempotent ارتقا از Migration اولیه: `docs/database/20261110-project-media-richtext-contact.sql`. فایل `initial.sql` تاریخی فقط schema اولیه را دارد؛ دیتابیس جدید نیز باید هر دو Migration را اعمال کند. اجرای عادی وب‌سایت Migration را اعمال نمی‌کند. پیش از اجرای نسخه جدید، `dotnet ef database update --project src/Asemane.Web` را طبق SETUP اجرا کنید. Rollback بعد از ثبت محتوای جدید نیازمند backup است، چون Down ستون‌های جدید را حذف می‌کند.

@@ -20,5 +20,18 @@ public class SiteService(AppDbContext db)
         .Include(x => x.ContentItem).ThenInclude(x => x.Images).ThenInclude(x => x.Translations);
     }
     public static MediaAsset? Cover(ContentItem item) => item.Images.OrderByDescending(x => x.IsCover).ThenBy(x => x.SortOrder).ThenBy(x => x.Id).FirstOrDefault();
+    public static MediaAsset? ProjectImage(ContentItem item, ImageRole role)
+    {
+        var selected = item.Images.FirstOrDefault(x => x.Role == role);
+        if (selected is not null) return selected;
+        // تا تعیین نقش تصاویر قدیمی، نمایش همان فایل‌های عمومی حفظ می‌شود.
+        var legacy = item.Images.Where(x => x.Role == ImageRole.General).OrderByDescending(x => x.IsCover).ThenBy(x => x.SortOrder).ThenBy(x => x.Id);
+        return role == ImageRole.HomeSecond ? legacy.FirstOrDefault(x => x.Id != ProjectImage(item,ImageRole.HomeFirst)?.Id) : legacy.FirstOrDefault();
+    }
+    public static List<MediaAsset> ProjectGallery(ContentItem item)
+    {
+        var selected = item.Images.Where(x => x.Role == ImageRole.ProjectGallery).ToList();
+        return (selected.Count > 0 ? selected : item.Images.Where(x => x.Role == ImageRole.General)).OrderBy(x => x.SortOrder).ThenBy(x => x.Id).ToList();
+    }
     public static string Alt(MediaAsset asset, string culture) => asset.Translations.FirstOrDefault(x => x.Culture == culture)?.Alt ?? "";
 }

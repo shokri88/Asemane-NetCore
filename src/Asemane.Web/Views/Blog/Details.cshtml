@@ -1,7 +1,7 @@
 @model PublicDetail
 @inject SiteService SiteService
 @using Microsoft.EntityFrameworkCore
-@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync(); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
 <!DOCTYPE html>
 <html lang="@culture">
 
@@ -40,60 +40,7 @@
     <!--/PRELOADER-->
 
     <!--HEADER-->
-    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
-
-        <div class="prague-logo">
-            <a href="/@culture">
-                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
-            <p>@chrome.Settings.Brand</p>
-        </div>
-
-        <div class="prague-header-wrapper">
-
-            <div class="prague-navigation">
-                <div class="pargue-navigation-wrapper">
-                    <div class="prague-navigation-inner">
-                        <nav>
-                            <ul class="main-menu">
-                                <li id="menu-item-1"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture">Home</a>
-                                </li>
-                                <li id="menu-item-2"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/about">About</a>
-                                </li>
-                                <li id="menu-item-3"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/projects">Project</a>
-                                </li>
-                                <li id="menu-item-4"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
-                                </li>
-                                <li id="menu-item-5"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/journal">Blog</a>
-                                </li>
-                                <li id="menu-item-6"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/contact">Contact</a>
-                                </li>
-
-
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <!-- mobile icon -->
-            <div class="prague-nav-menu-icon">
-                <a href="#">
-                    <i></i>
-                </a>
-            </div>
-        </div>
-    </header>
+    <partial name="_PublicHeader" model="culture" />
     <!--/END HEADER-->
     <!--MAIN BODY-->
 
@@ -118,7 +65,7 @@
                 <div class="row-fluid ">
                     <div class="col-sm-12 ">
                         <div class="heading no-padd-top-bottom left dark">
-                            <div class="content "><partial name="_ContentBody" model="t.Body" /></div>
+                            <div class="content "><partial name="_ContentBody" model="t" /></div>
                         </div>
                     </div>
 

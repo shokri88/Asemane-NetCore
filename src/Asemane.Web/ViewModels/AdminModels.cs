@@ -19,6 +19,7 @@ public class ContentForm
     [Required, MaxLength(180)] public string Slug { get; set; } = "";
     [MaxLength(500)] public string Summary { get; set; } = "";
     [MaxLength(100000)] public string Body { get; set; } = "";
+    public bool BodyIsHtml { get; set; }
     [MaxLength(180)] public string Subtitle { get; set; } = "";
     [MaxLength(180)] public string Location { get; set; } = "";
     [MaxLength(80)] public string ProjectStatus { get; set; } = "";
@@ -56,7 +57,9 @@ public class CategoryForm
 public class SettingsForm
 {
     [Required, MaxLength(150)] public string Brand { get; set; } = "";
-    [MaxLength(50), Phone] public string? Phone { get; set; }
+    [MaxLength(200)] public string? Phone { get; set; }
+    [MaxLength(30)] public string PostalCode { get; set; } = "";
+    [MaxLength(2000)] public string MapEmbedUrl { get; set; } = "";
     [MaxLength(150), EmailAddress] public string? Email { get; set; }
     [MaxLength(500), Url] public string? InstagramUrl { get; set; }
     [Range(-90,90)] public decimal? Latitude { get; set; }
@@ -78,6 +81,7 @@ public class MediaForm
     [MaxLength(300)] public string Caption { get; set; } = "";
     [Range(0,99999)] public int SortOrder { get; set; }
     public bool IsCover { get; set; }
+    [EnumDataType(typeof(ImageRole))] public ImageRole Role { get; set; }
 }
 public class UserForm
 {

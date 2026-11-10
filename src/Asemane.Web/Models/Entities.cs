@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Asemane.Web.Models;
 
 public enum ContentKind { Project = 1, Article = 2, Page = 3, Team = 4 }
+public enum ImageRole { General = 0, HomeFirst = 1, HomeSecond = 2, ProjectCard = 3, ProjectBanner = 4, ProjectGallery = 5 }
 public class ApplicationUser : IdentityUser { [MaxLength(100)] public string DisplayName { get; set; } = ""; }
 public class ContentItem
 {
@@ -34,6 +35,7 @@ public class ContentTranslation
     [MaxLength(180)] public string Slug { get; set; } = "";
     [MaxLength(500)] public string Summary { get; set; } = "";
     public string Body { get; set; } = "";
+    public bool BodyIsHtml { get; set; }
     [MaxLength(180)] public string Subtitle { get; set; } = "";
     [MaxLength(180)] public string Location { get; set; } = "";
     [MaxLength(80)] public string ProjectStatus { get; set; } = "";
@@ -71,6 +73,7 @@ public class MediaAsset
     [MaxLength(50)] public string ContentType { get; set; } = "";
     public long Bytes { get; set; }
     public bool IsCover { get; set; }
+    public ImageRole Role { get; set; }
     public int SortOrder { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public List<MediaTranslation> Translations { get; set; } = [];
@@ -88,7 +91,9 @@ public class SiteSettings
 {
     public int Id { get; set; } = 1;
     [MaxLength(150)] public string Brand { get; set; } = "Asmane Architectural Studio";
-    [MaxLength(50)] public string Phone { get; set; } = "";
+    [MaxLength(200)] public string Phone { get; set; } = "";
+    [MaxLength(30)] public string PostalCode { get; set; } = "";
+    [MaxLength(2000)] public string MapEmbedUrl { get; set; } = "";
     [MaxLength(150)] public string Email { get; set; } = "";
     [MaxLength(500)] public string InstagramUrl { get; set; } = "";
     public decimal? Latitude { get; set; }

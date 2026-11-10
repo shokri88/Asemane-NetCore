@@ -1,7 +1,7 @@
 @model PublicDetail
 @inject SiteService SiteService
 @using Microsoft.EntityFrameworkCore
-@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync(); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.Cover(item); }
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.ProjectImage(item,ImageRole.ProjectBanner); var gallery = SiteService.ProjectGallery(item); var galleryCover = gallery.FirstOrDefault(); }
 <!DOCTYPE html>
 <html lang="@culture">
 
@@ -40,60 +40,7 @@
     <!--/PRELOADER-->
 
     <!--HEADER-->
-    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
-
-        <div class="prague-logo">
-            <a href="/@culture">
-                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
-            <p>@chrome.Settings.Brand</p>
-        </div>
-
-        <div class="prague-header-wrapper">
-
-            <div class="prague-navigation">
-                <div class="pargue-navigation-wrapper">
-                    <div class="prague-navigation-inner">
-                        <nav>
-                            <ul class="main-menu">
-                                <li id="menu-item-1"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture">Home</a>
-                                </li>
-                                <li id="menu-item-2"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/about">About</a>
-                                </li>
-                                <li id="menu-item-3"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/projects">Project</a>
-                                </li>
-                                <li id="menu-item-4"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
-                                </li>
-                                <li id="menu-item-5"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/journal">Blog</a>
-                                </li>
-                                <li id="menu-item-6"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/contact">Contact</a>
-                                </li>
-
-
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <!-- mobile icon -->
-            <div class="prague-nav-menu-icon">
-                <a href="#">
-                    <i></i>
-                </a>
-            </div>
-        </div>
-    </header>
+    <partial name="_PublicHeader" model="culture" />
     <!--/END HEADER-->
     <!--MAIN BODY-->
 
@@ -181,7 +128,7 @@
 
                             <div class="subtitle">@t.Subtitle</div>
                             <h2 class="title">@t.Title</h2>
-                            <div class="content "><partial name="_ContentBody" model="t.Body" /></div>
+                            <div class="content "><partial name="_ContentBody" model="t" /></div>
                         </div>
                     </div>
 
@@ -195,12 +142,12 @@
                     <div class="col-sm-12 no-padd-inner">
                         <main class="showcase">
                             <div class="main-image">
-                                <img id="mainPreview" src="@(cover is null ? null : "/media/" + cover.Id)" alt="@(cover is null ? t.Title : SiteService.Alt(cover,culture))">
+                                <img id="mainPreview" src="@(galleryCover is null ? null : "/media/" + galleryCover.Id)" alt="@(galleryCover is null ? t.Title : SiteService.Alt(galleryCover,culture))">
                             </div>
 
                             <div class="thumbs-wrap">
                                 <div class="swiper thumbs-slider">
-                                    <div class="swiper-wrapper" id="slides">@foreach (var image in item.Images.OrderBy(x => x.SortOrder).ThenBy(x => x.Id)) { <div class="swiper-slide"><img src="/media/@image.Id" alt="@SiteService.Alt(image,culture)" loading="lazy"></div> }</div>
+                                    <div class="swiper-wrapper" id="slides">@foreach (var image in gallery) { <div class="swiper-slide"><img src="/media/@image.Id" alt="@SiteService.Alt(image,culture)" loading="lazy"></div> }</div>
                                 </div>
                                 <button class="slider-arrow prev" type="button" aria-label="تصویر قبلی"></button>
                                 <button class="slider-arrow next" type="button" aria-label="تصویر بعدی"></button>
@@ -230,7 +177,7 @@
     <script src="/template/js/jquery.magnific-popup.min.js"></script>
     <script src="/template/js/all.js"></script>
 
-@if (item.Images.Count > 0) {
+@if (gallery.Count > 0) {
     <script>
         const slides = document.getElementById("slides");
         const preview = document.getElementById("mainPreview");

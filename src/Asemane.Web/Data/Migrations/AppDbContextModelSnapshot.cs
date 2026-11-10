@@ -222,6 +222,9 @@ namespace Asemane.Web.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("BodyIsHtml")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ContentItemId")
                         .HasColumnType("int");
 
@@ -323,6 +326,9 @@ namespace Asemane.Web.Data.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
@@ -334,6 +340,10 @@ namespace Asemane.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContentItemId");
+
+                    b.HasIndex("ContentItemId", "Role")
+                        .IsUnique()
+                        .HasFilter("[ContentItemId] IS NOT NULL AND [Role] >= 1 AND [Role] <= 4");
 
                     b.ToTable("Media");
                 });
@@ -409,10 +419,20 @@ namespace Asemane.Web.Data.Migrations
                         .HasPrecision(9, 6)
                         .HasColumnType("decimal(9,6)");
 
+                    b.Property<string>("MapEmbedUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("TeamCount")
                         .HasColumnType("int");

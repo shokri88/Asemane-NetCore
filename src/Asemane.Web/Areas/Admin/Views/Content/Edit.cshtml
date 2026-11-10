@@ -2,7 +2,7 @@
 @{ ViewData["Title"] = Model.Id == 0 ? "افزودن محتوا" : "ویرایش محتوا"; ViewData["Description"] = Display.Kind(Model.Kind) + " · زبان انگلیسی"; }
 @section Actions { <a class="btn btn-outline-secondary" asp-action="Index" asp-route-kind="@Model.Kind">بازگشت به فهرست</a> }
 <form method="post" asp-action="Edit" class="content-form">
-<input asp-for="Id" type="hidden"><input asp-for="Kind" type="hidden"><input asp-for="Version" type="hidden"><input asp-for="Culture" type="hidden">
+<input asp-for="Id" type="hidden"><input asp-for="Kind" type="hidden"><input asp-for="Version" type="hidden"><input asp-for="Culture" type="hidden"><input asp-for="BodyIsHtml" type="hidden">
 <div asp-validation-summary="All" class="alert alert-danger validation-summary" role="alert"></div>
 <div class="card mb-4"><div class="card-header">اطلاعات محتوا</div><div class="card-body"><div class="row g-3">
 <div class="col-md-8"><label asp-for="Title" class="form-label">عنوان انگلیسی *</label><input asp-for="Title" class="form-control" dir="ltr" maxlength="180" required><span asp-validation-for="Title" class="field-error"></span></div>
@@ -19,7 +19,7 @@
 @if (Model.Kind == ContentKind.Team) { <div class="col-md-4"><label asp-for="Subtitle" class="form-label">سمت عضو تیم</label><input asp-for="Subtitle" class="form-control" dir="ltr" maxlength="180"></div> }
 @if (Model.Kind == ContentKind.Article) { <div class="col-md-4"><label asp-for="AuthorName" class="form-label">نام نویسنده واقعی</label><input asp-for="AuthorName" class="form-control" dir="ltr" maxlength="100"></div> }
 <div class="col-12"><label asp-for="Summary" class="form-label">خلاصه توضیحات</label><input asp-for="Summary" class="form-control" dir="ltr" maxlength="500"></div>
-<div class="col-12"><label asp-for="Body" class="form-label">متن اصلی</label><textarea asp-for="Body" class="form-control content-editor" dir="ltr" rows="12" maxlength="100000"></textarea><div class="form-text">هر بخش با یک خط خالی جدا شود. تیتر با ## یا ### و فهرست با - شروع شود. کد HTML به‌صورت متن نمایش داده می‌شود.</div><span asp-validation-for="Body" class="field-error"></span></div>
+<div class="col-12"><label asp-for="Body" class="form-label">متن اصلی</label><textarea asp-for="Body" class="form-control content-editor" dir="ltr" rows="12" maxlength="100000"></textarea><div class="form-text">ویرایشگر HTML با تیتر، فهرست، جدول و لینک؛ کدهای اجرایی هنگام ذخیره حذف می‌شوند. تصاویر از صفحه مدیریت تصاویر اضافه شوند.</div><span asp-validation-for="Body" class="field-error"></span></div>
 </div></div></div>
 <div class="card mb-4"><div class="card-header">سئو و نمایش در نتایج جست‌وجو</div><div class="card-body"><div class="row g-3">
 <div class="col-md-6"><label asp-for="SeoTitle" class="form-label">عنوان سئو</label><input asp-for="SeoTitle" class="form-control" dir="ltr" maxlength="70" data-counter="seo-title-count"><div class="form-text" id="seo-title-count"></div><span asp-validation-for="SeoTitle" class="field-error"></span></div>
@@ -31,3 +31,11 @@
 </div></div><div class="card-footer d-flex gap-2 flex-wrap"><button class="btn btn-primary">ذخیره تغییرات</button><a class="btn btn-light" asp-action="Index" asp-route-kind="@Model.Kind">انصراف</a>
 @if (Model.Id != 0) { <a class="btn btn-outline-secondary ms-auto" asp-controller="Media" asp-action="Index" asp-route-contentId="@Model.Id">مدیریت تصاویر</a> }
 </div></div></form>
+
+@section Styles { <link rel="stylesheet" href="~/lib/summernote/summernote-lite.min.css" asp-append-version="true"> }
+@section Scripts {
+<script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
+<script src="~/lib/summernote/summernote-lite.min.js" asp-append-version="true"></script>
+<script src="~/lib/summernote/lang/summernote-fa-IR.min.js" asp-append-version="true"></script>
+<script src="~/js/content-editor.js" asp-append-version="true"></script>
+}

@@ -1,13 +1,7 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @model PublicDetail
 @inject SiteService SiteService
-@{ var mapUrl = Configuration["Site:MapEmbedUrl"];
-if (string.IsNullOrWhiteSpace(mapUrl)) {
-    var settings = (await SiteService.GetAsync(ViewData["Culture"] as string ?? "en")).Settings;
-    if (settings.Latitude.HasValue && settings.Longitude.HasValue)
-        mapUrl = FormattableString.Invariant($"https://www.google.com/maps?q={settings.Latitude},{settings.Longitude}&output=embed");
-}
-Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture);  }
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var mapUrl = ContactMap.GetUrl(chrome.Settings,Configuration); }
 <!DOCTYPE html>
 <html lang="@culture">
 
@@ -45,54 +39,7 @@ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome =
     <!--/PRELOADER-->
 
     <!--HEADER-->
-    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
-
-        <div class="prague-logo">
-            <a href="/@culture">
-                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
-            <p>@chrome.Settings.Brand</p>
-        </div>
-
-        <div class="prague-header-wrapper">
-
-            <div class="prague-navigation">
-                <div class="pargue-navigation-wrapper">
-                    <div class="prague-navigation-inner">
-                        <nav>
-                            <ul class="main-menu">
-                                <li id="menu-item-1"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture">Home</a>
-                                </li>
-                                <li id="menu-item-2"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/projects">Projects</a>
-                                </li>
-                                <li id="menu-item-3"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/about">About Us</a>
-                                </li>
-                                <li id="menu-item-4"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/contact">Contact</a>
-                                </li>
-                                <li id="menu-item-5"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/journal">Blog</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <!-- mobile icon -->
-            <div class="prague-nav-menu-icon">
-                <a href="#">
-                    <i></i>
-                </a>
-            </div>
-        </div>
-    </header>
+    <partial name="_PublicHeader" model="culture" />
     <!--/END HEADER-->
     <!--MAIN BODY-->
 <h1 class="sr-only">@Model.Translation.Title</h1>
@@ -149,7 +96,7 @@ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome =
                                         </div>
                                         <div class="project-detail-block-descr">
                                             <p>
-                                                @Configuration["Site:PostalCode"]
+                                                @(chrome.Settings.PostalCode.Length > 0 ? chrome.Settings.PostalCode : Configuration["Site:PostalCode"])
                                             </p>
                                         </div>
                                     </div>

@@ -1,7 +1,7 @@
 @model List<ContentTranslation>
 @inject SiteService SiteService
 @using Microsoft.EntityFrameworkCore
-@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var firstProject = await SiteService.Published(culture,ContentKind.Project).OrderBy(x => x.ContentItem.SortOrder).ThenBy(x => x.Id).Select(x => x.Slug).FirstOrDefaultAsync();  }
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture);  }
 <!DOCTYPE html>
 <html lang="@culture">
 
@@ -37,60 +37,7 @@
     <!--/PRELOADER-->
 
     <!--HEADER-->
-    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
-
-        <div class="prague-logo">
-            <a href="/@culture">
-                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
-            <p>@chrome.Settings.Brand</p>
-        </div>
-
-        <div class="prague-header-wrapper">
-
-            <div class="prague-navigation">
-                <div class="pargue-navigation-wrapper">
-                    <div class="prague-navigation-inner">
-                        <nav>
-                            <ul class="main-menu">
-                                <li id="menu-item-1"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture">Home</a>
-                                </li>
-                                <li id="menu-item-2"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/about">About</a>
-                                </li>
-                                <li id="menu-item-3"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/projects">Project</a>
-                                </li>
-                                <li id="menu-item-4"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="@(firstProject is null ? "/"+culture+"/projects" : Slugs.Path(ContentKind.Project,culture,firstProject))">Project Details</a>
-                                </li>
-                                <li id="menu-item-5"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/journal">Blog</a>
-                                </li>
-                                <li id="menu-item-6"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/contact">Contact</a>
-                                </li>
-
-
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <!-- mobile icon -->
-            <div class="prague-nav-menu-icon">
-                <a href="#">
-                    <i></i>
-                </a>
-            </div>
-        </div>
-    </header>
+    <partial name="_PublicHeader" model="culture" />
     <!--/END HEADER-->
 
     <!--MAIN BODY-->
@@ -106,8 +53,8 @@
 
                         <div class="swiper-wrapper">
 @foreach (var t in Model) {
-    var cover = SiteService.Cover(t.ContentItem);
-    var second = t.ContentItem.Images.OrderBy(x => x.SortOrder).ThenBy(x => x.Id).FirstOrDefault(x => x.Id != cover?.Id);
+    var cover = SiteService.ProjectImage(t.ContentItem,ImageRole.HomeFirst);
+    var second = SiteService.ProjectImage(t.ContentItem,ImageRole.HomeSecond);
     var category = t.ContentItem.Category?.Translations.FirstOrDefault(x => x.Culture == culture);
 <div class="swiper-slide">
                                 <div class="slide-image full-height-window-hard">

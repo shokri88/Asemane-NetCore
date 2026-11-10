@@ -1,9 +1,2 @@
-@model string
-@foreach (var raw in Model.Replace("\r", "").Split("\n\n", StringSplitOptions.RemoveEmptyEntries))
-{
-    var block = raw.Trim();
-    if (block.StartsWith("### ")) { <h3>@block[4..]</h3> }
-    else if (block.StartsWith("## ")) { <h2>@block[3..]</h2> }
-    else if (block.Split('\n').All(line => line.StartsWith("- "))) { <ul>@foreach (var line in block.Split('\n')) { <li>@line[2..]</li> }</ul> }
-    else { <p>@block</p> }
-}
+@model ContentTranslation
+@RichText.Render(Model)

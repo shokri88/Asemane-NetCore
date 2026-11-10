@@ -15,7 +15,7 @@
 ## نقاط توسعه بعدی
 
 - فارسی: Languages، ترجمه UI، فرم Culture، Page Key و RTL عمومی.
-- WYSIWYG: طراحی sanitizer معتبر و سیاست لینک/HTML پیش از Html.Raw.
+- ویرایشگر HTML: Summernote محلی و RichText با HtmlSanitizer پیاده شده است؛ allowlist و تست‌های XSS حفظ شوند.
 - فایل: decoder/بهینه‌سازی/thumbnail، cache version و اسکن متناسب با هاست.
 - مدیریت: سطل زباله/بازیابی، ویرایش نقش و اطلاعات کاربر، Audit Log و پیش‌نمایش پیش‌نویس.
 - production: تست SQL واقعی و IIS، تنظیم دامنه، backup، HTTPS و ایندکس.
@@ -31,3 +31,7 @@
 ## الزام جدید حفظ قالب
 
 صفحات عمومی باید HTML و کلاس‌ها و CSS/JS اصلی `Asemane-UI@5c4149ebfb028c19fea918ec638246889607205b` را حفظ کنند. بازطراحی قبلی مورد پذیرش کاربر نیست. فقط جایگذاری داده و SEO مجاز است. checksumها در `template-assets.sha256.json` و تست `OriginalTemplateAssetsAndDynamicSlotsArePreserved` هستند. برای مقایسه نمایشی، داده/تعداد رکورد و تصویر یکسان لازم است؛ دموهای قالب اطلاعات واقعی CMS نیستند.
+
+## ادامه تغییرات ۱۰ نوامبر ۲۰۲۶
+
+درخواست جدید کاربر ویرایشگر HTML و اتصال فیلتر/تصاویر/تماس را مجاز کرد. متن HTML فقط از RichText رندر شود؛ مستقیم Html.Raw نزنید. نقش‌های تصویر را با Cover عمومی یکی نکنید. منوی مشترک `_PublicHeader` است؛ markup و CSS اصلی حفظ شده‌اند. ارتقای DB قبل از اجرای این نسخه الزامی است؛ دستور و SQL در DATABASE آمده است. تست‌های `RequestedChangesTests` رفتارهای جدید را پوشش می‌دهند.

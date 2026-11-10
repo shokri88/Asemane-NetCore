@@ -39,59 +39,7 @@
 
 
     <!--HEADER-->
-    <header class="prague-header simple sticky-menu sticky-mobile-menu dark ">
-
-        <div class="prague-logo">
-            <a href="/@culture">
-                <img src="@(chrome.Settings.LogoId.HasValue ? "/media/" + chrome.Settings.LogoId : "/template/img/main/logo/logo.png")" class="image_logo" alt="@chrome.Settings.Brand" /></a>
-            <p>@chrome.Settings.Brand</p>
-        </div>
-
-        <div class="prague-header-wrapper">
-
-            <div class="prague-navigation">
-                <div class="pargue-navigation-wrapper">
-                    <div class="prague-navigation-inner">
-                        <nav>
-                            <ul class="main-menu">
-                                <li id="menu-item-1"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture">Home</a>
-                                </li>
-                                <li id="menu-item-2"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/projects">Projects</a>
-                                </li>
-                                <li id="menu-item-3"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/about">About Us</a>
-                                </li>
-                                <li id="menu-item-4"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/contact">Contact</a>
-                                </li>
-                                <li id="menu-item-5"
-                                    class="menu-item menu-item-type-post_type menu-item-object-page  menu-item-2445">
-                                    <a href="/@culture/journal">Blog</a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- mobile icon -->
-            <div class="prague-nav-menu-icon">
-                <a href="#">
-                    <i></i>
-                </a>
-            </div>
-
-
-        </div>
-    </header>
+    <partial name="_PublicHeader" model="culture" />
     <!-- END HEADER -->
 
 
@@ -105,8 +53,8 @@
             <div class="prague-dropdown">
                 <a href="#" data-toggle="dropdown" class="dropdown">Filters</a>
                 <ul class="prague-dropdown-menu">
-<li class="active" data-filter="p_f_all"><i class="fa fa-square-o"></i>All Work</li>
-@foreach (var category in Model.Categories) { <li data-filter="p_f_@category.CategoryId"><i class="fa fa-square-o"></i>@category.Name</li> }
+<li class="@(string.IsNullOrEmpty(Model.Category) ? "active" : "")" tabindex="0" role="link" data-filter="p_f_all" data-url="/@culture/projects"><i class="fa fa-square-o"></i>All Work</li>
+@foreach (var category in Model.Categories) { <li class="@(Model.Category == category.Slug ? "active" : "")" data-filter="p_f_@category.CategoryId" data-url="/@culture/projects?category=@category.Slug" tabindex="0" role="link"><i class="fa fa-square-o"></i>@category.Name</li> }
 </ul>
             </div>
 
@@ -117,7 +65,7 @@
                     <div class="row prague_grid prague_count_col4 prague_gap_col15 js-load-more-block no-footer-content prague-load-wrapper"
                         data-columns="prague_count_col4" data-gap="prague_gap_col15">
 @{ var itemIndex = 0; }
-@foreach (var t in Model.Items) { var cover = SiteService.Cover(t.ContentItem);
+@foreach (var t in Model.Items) { var cover = SiteService.ProjectImage(t.ContentItem,ImageRole.ProjectCard);
 <div
                             class="portfolio-item-wrapp portfolio-item-paralax js-filter-simple-block p_f_all p_f_@(t.ContentItem.CategoryId) @(itemIndex++ % 3 == 1 ? "column_paralax" : "") ">
                             <div class="portfolio-item">
@@ -161,6 +109,7 @@
     <script src="/template/js/jquery.magnific-popup.min.js"></script>
     <script src="/template/js/all.js"></script>
     <script src="/template/js/isotope.pkgd.min.js"></script>
+<script src="/js/project-filters.js" defer></script>
 </body>
 
 </html>
