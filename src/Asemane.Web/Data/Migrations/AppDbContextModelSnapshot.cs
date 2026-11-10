@@ -343,7 +343,7 @@ namespace Asemane.Web.Data.Migrations
 
                     b.HasIndex("ContentItemId", "Role")
                         .IsUnique()
-                        .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7,8)");
+                        .HasFilter("[ContentItemId] IS NOT NULL AND [Role] IN (1,2,3,4,6,7)");
 
                     b.ToTable("Media");
                 });

@@ -63,3 +63,7 @@ SQL idempotent ارتقا از Migration اولیه: `docs/database/20261110-pro
 Migration `AboutStatisticsAndTeamImages` چهار ستون عنوان `AboutTotalTitle`، `AboutDesignTitle`، `AboutConstructionTitle` و `AboutCompletedTitle` را در SiteTranslation با defaultهای اصلی قالب و چهار ستون nullable عدد متناظر در Settings اضافه می‌کند. null مقدار خودکار قبلی را حفظ می‌کند و صفر override دستی است. index یکتای جایگاه‌های رسانه به نقش‌های ۱،۲،۳،۴،۶،۷،۸ محدود است؛ نقش عمومی و گالری همچنان چندتایی‌اند. داده موجود حذف یا بازنویسی نمی‌شود.
 
 SQL idempotent این ارتقا پس از Migration قبلی: `docs/database/20261110-about-statistics-team-images.sql`. قبل از اجرای برنامه `dotnet ef database update --project src/Asemane.Web` را اجرا کنید. Down مقادیر جدید را حذف می‌کند؛ rollback پس از ورود داده جدید به backup نیاز دارد.
+
+## اصلاح به دو تصویر عضو
+
+پس از AboutStatisticsAndTeamImages، Migration `LimitTeamToTwoImages` را هم اعمال کنید. index یکتای نقش‌ها اکنون ۱،۲،۳،۴،۶،۷ را شامل می‌شود. Role=8 مربوط به عضو تیم به Role=0 عمومی تبدیل می‌شود؛ هیچ فایل یا رکورد رسانه‌ای حذف نمی‌شود. Down فقط index قبلی را برمی‌گرداند و نقش‌های عمومی‌شده را حدس نمی‌زند؛ بازیابی طبقه‌بندی قبلی به backup نیاز دارد. SQL: `docs/database/20261110-team-two-images.sql`.

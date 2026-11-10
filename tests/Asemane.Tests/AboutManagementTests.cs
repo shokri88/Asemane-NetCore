@@ -35,7 +35,7 @@ public class AboutManagementTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.OK,(await client.PostAsync("/admin/settings",new FormUrlEncodedContent(form))).StatusCode);
         Assert.Contains("counter-num\">42</h6>",await client.GetStringAsync("/en/about"));
     }
-    [Fact] public async Task TeamHasThreeIndependentSlotsWithServerAndDatabaseUniqueness()
+    [Fact] public async Task TeamHasTwoIndependentSlotsWithServerAndDatabaseUniqueness()
     {
         await Login(); using var scope = factory.Services.CreateScope();var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var team = new ContentItem { Kind = ContentKind.Team, Translations = [new ContentTranslation { Kind = ContentKind.Team, Title = "Architect", Slug = "architect", Body = "Biography", Published = true, PublishedAt = DateTimeOffset.UtcNow.AddDays(-1) }] };
@@ -46,15 +46,27 @@ public class AboutManagementTests : IAsyncLifetime
             form.Add(new ByteArrayContent(Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a66kAAAAASUVORK5CYII=")),"file","image.png");
             return await client.PostAsync("/admin/media/upload",form);
         }
-        foreach(var role in new[]{ImageRole.TeamSquare,ImageRole.TeamLandscapeFirst,ImageRole.TeamLandscapeSecond})Assert.Equal(HttpStatusCode.Redirect,(await Upload(role)).StatusCode);
+        foreach(var role in new[]{ImageRole.TeamSquare,ImageRole.TeamLandscape})Assert.Equal(HttpStatusCode.Redirect,(await Upload(role)).StatusCode);
         Assert.Equal(HttpStatusCode.Redirect,(await Upload(ImageRole.TeamSquare)).StatusCode);
         Assert.Equal(HttpStatusCode.BadRequest,(await Upload(ImageRole.HomeFirst)).StatusCode);
-        var media=await db.Media.Where(x=>x.ContentItemId==team.Id).ToListAsync();Assert.Equal(3,media.Count);Assert.Equal(3,Directory.GetFiles(Path.Combine(factory.Root,"uploads")).Length);
+        Assert.Equal(HttpStatusCode.BadRequest,(await Upload((ImageRole)8)).StatusCode);
+        var media=await db.Media.Where(x=>x.ContentItemId==team.Id).ToListAsync();Assert.Equal(2,media.Count);Assert.Equal(2,Directory.GetFiles(Path.Combine(factory.Root,"uploads")).Length);
         string Src(ImageRole role)=>"src=\"/media/"+media.Single(x=>x.Role==role).Id+"\"";
-        var about=await client.GetStringAsync("/en/about");Assert.Contains(Src(ImageRole.TeamSquare),about);Assert.DoesNotContain(Src(ImageRole.TeamLandscapeFirst),about);Assert.DoesNotContain(Src(ImageRole.TeamLandscapeSecond),about);
-        var detail=await client.GetStringAsync("/en/team/architect");Assert.Contains(Src(ImageRole.TeamLandscapeFirst),detail);Assert.Contains(Src(ImageRole.TeamLandscapeSecond),detail);Assert.DoesNotContain(Src(ImageRole.TeamSquare),detail);
+        var about=await client.GetStringAsync("/en/about");Assert.Contains(Src(ImageRole.TeamSquare),about);Assert.DoesNotContain(Src(ImageRole.TeamLandscape),about);
+        var detail=await client.GetStringAsync("/en/team/architect");Assert.Contains(Src(ImageRole.TeamLandscape),detail);Assert.DoesNotContain(Src(ImageRole.TeamSquare),detail);
+        Assert.Single(Regex.Matches(detail,"class=\"project-details-slider-3d\""));
         db.Media.Add(new MediaAsset{ContentItemId=team.Id,Role=ImageRole.TeamSquare,StoredName="duplicate.png"});
         await Assert.ThrowsAsync<DbUpdateException>(()=>db.SaveChangesAsync());
+    }
+    [Fact] public async Task RetiredThirdSlotIsPreservedAsGeneralMedia()
+    {
+        using var scope=factory.Services.CreateScope();var db=scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var team=new ContentItem {Kind=ContentKind.Team,Images=[new MediaAsset {Role=(ImageRole)8,StoredName="retired.png"}]};
+        db.Contents.Add(team);await db.SaveChangesAsync();
+        var root=Path.Combine(factory.Root,"uploads");Directory.CreateDirectory(root);var path=Path.Combine(root,"retired.png");await File.WriteAllTextAsync(path,"preserve file");
+        var migration=new Asemane.Web.Data.Migrations.LimitTeamToTwoImages();
+        foreach(var operation in migration.UpOperations.OfType<Microsoft.EntityFrameworkCore.Migrations.Operations.SqlOperation>()) await db.Database.ExecuteSqlRawAsync(operation.Sql);
+        db.ChangeTracker.Clear();var media=await db.Media.SingleAsync();Assert.Equal(ImageRole.General,media.Role);Assert.Equal("retired.png",media.StoredName);Assert.Equal("preserve file",await File.ReadAllTextAsync(path));
     }
     [Fact] public async Task LegacyTeamCoverStillAppearsInAboutAndMemberPage()
     {

@@ -1,7 +1,7 @@
 @model PublicDetail
 @inject SiteService SiteService
 @using Microsoft.EntityFrameworkCore
-@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.TeamImage(item,ImageRole.TeamLandscapeFirst); var secondary = SiteService.TeamImage(item,ImageRole.TeamLandscapeSecond); }
+@{ Layout = null; var culture = ViewData["Culture"] as string ?? "en"; var chrome = await SiteService.GetAsync(culture); var t = Model.Translation; var item = t.ContentItem; var cover = SiteService.TeamImage(item,ImageRole.TeamLandscape); }
 <!DOCTYPE html>
 <html lang="@culture">
 
@@ -66,9 +66,6 @@
                     <div class="col-sm-12 ">
                         <div class="heading no-padd-top-bottom left dark">
                             <div class="content "><partial name="_ContentBody" model="t" /></div>
-                            @if (secondary is not null) {
-                                <div class="project-detail-slider-outer"><div class="project-details-slider-3d"><img src="/media/@secondary.Id" alt="@SiteService.Alt(secondary,culture)" loading="lazy"></div></div>
-                            }
                         </div>
                     </div>
 
